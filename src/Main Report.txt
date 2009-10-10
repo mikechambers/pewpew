@@ -1,0 +1,72 @@
+Main.swf Movie Report
+----------------------
+
+Frame #    Frame Bytes    Total Bytes    Scene
+-------    -----------    -----------    ----------------
+      1         340389         340389    Scene 1 (AS 3.0 Classes Export Frame)
+      2              6         340395    
+      3              2         340397    
+      4              2         340399    
+      5              2         340401    
+      6              2         340403    
+      7              2         340405    
+
+Scene                        Shape Bytes    Text Bytes    ActionScript Bytes
+-------------------------    -----------    ----------    ------------------
+Scene 1                                0             0                 54544
+
+Symbol                       Shape Bytes    Text Bytes    ActionScript Bytes
+-------------------------    -----------    ----------    ------------------
+GameController                       103             0                     0
+TitleGraphic                           0           673                     0
+GameOverScreen                         0            65                     0
+GameMenu                               0             0                     0
+ProfileManager                         0           166                     0
+ship_graphic                           0             0                     0
+chaserenemy_graphic                    0             0                     0
+ufoenemy_graphic                       0             0                     0
+ChaserEnemy                            0             0                     0
+UFOEnemy                               0             0                     0
+explosion_graphic                      0             0                     0
+Explosion                              0             0                     0
+missile_graphic                        0             0                     0
+Missile                               57             0                     0
+basicenemy_graphic                     0             0                     0
+Ship                                   0             0                     0
+FpsView                                0           849                     0
+BasicEnemy                             0             0                     0
+WaveCompletedView                      0            77                     0
+GameArea                               0             0                     0
+SimpleButton                          39           174                     0
+ScoreBar                              44           628                     0
+
+Font Name                 Bytes        Characters    
+----------------------    ---------    --------------
+Helvetica                      1806     :GLOWaeimrsv
+
+ActionScript Bytes    Location
+------------------    --------
+             54544    Scene 1:Frame 1
+
+Bitmap                     Compressed    Compression
+-----------------------    ----------  --------  -----------
+basicenemy_bmp                  1374        6380   JPEG Quality=80
+ship_bmp                        1848       10320   JPEG Quality=80
+missile_bmp                      497         400   JPEG Quality=80
+explosion_bmp                   2264       12064   JPEG Quality=80
+ufoenemy_bmp                    2448       14472   JPEG Quality=80
+chaserenemy_bmp                 1052        4056   JPEG Quality=80
+background.png                250192      691200   Lossless
+
+Event Sounds: 11KHz Mono 16 kbps MP3
+
+
+Sound name                 Bytes        Format    
+-----------------------    ---------    ----------
+ufo_noise.wav               15407        11KHz Mono 16 kbps MP3
+pew_src.wav                  1575        11KHz Mono 16 kbps MP3
+explosion_src.wav            2095        11KHz Mono 16 kbps MP3
+
+
+
+

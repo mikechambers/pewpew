@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://ns.adobe.com/air/application/2.0beta">
+
+	<supportedProfiles>desktop mobileDevice</supportedProfiles>
+		
+	<iPhone>
+		<bundleSeedID>6KN5FS36Q2</bundleSeedID>
+		<!--
+		<InfoAdditions>
+			<![CDATA[
+				<key>CTRenderEngine</key>
+				<string>GLES1</string>
+			]]>
+		</InfoAdditions>
+		-->
+	</iPhone>
+
+	<id>com.mikechambers.pewpew</id>
+	<filename>PewPew</filename>
+	<name>PewPew</name>
+	<version>v1</version>
+	<!-- <description></description> -->
+	<!-- <copyright></copyright> -->
+
+	<initialWindow>
+
+		<autoOrients>false</autoOrients>
+		<fullScreen>true</fullScreen>
+		<aspectRatio>portrait</aspectRatio>
+		<content>src/Main.swf</content>
+		<!-- <title></title> -->
+		<systemChrome>none</systemChrome>
+		<!-- <transparent></transparent> -->
+		<visible>true</visible>
+		<!-- <minimizable></minimizable> -->
+		<!-- <maximizable></maximizable> -->
+		<resizable>false</resizable>
+		<width>320</width>
+		<height>460</height>
+		<!-- <x></x> -->
+		<!-- <y></y> -->
+		<!-- <minSize></minSize> -->
+		<!-- <maxSize></maxSize> -->
+	</initialWindow>
+</application>

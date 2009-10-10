@@ -1,0 +1,5 @@
+#!/bin/bash
+
+compile.py --optimize --iphone-provisioning-profile profiles/3GS_Test_Dev.mobileprovision --iphone-id com.mikechambers.3gstest --iphone-developer-name "Mike Chambers" --iphone-display-name "PewPew" --verbose --output results src/Main.swf
+
+open results
