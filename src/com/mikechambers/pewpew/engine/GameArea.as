@@ -369,6 +369,16 @@ package com.mikechambers.pewpew.engine
 
 				shipBmpData = new BitmapData(shipBounds.width, 
 												shipBounds.height, true, 0);
+
+				var shipOffset:Matrix = ship.transform.matrix;
+				shipOffset.tx = ship.x - shipBounds.x;
+				shipOffset.ty = ship.y - shipBounds.y;			
+
+				shipBmpData.draw(ship, shipOffset);
+
+				/*
+				shipBmpData = new BitmapData(shipBounds.width, 
+												shipBounds.height, true, 0);
 				//shipBmpData.draw(ship, null);									
 				//temp
 				
@@ -389,6 +399,7 @@ package com.mikechambers.pewpew.engine
 				ship.transform.matrix3D = null;
 				shipBmpData.draw(ship, matrix);
 				ship.transform.matrix3D = shipOffset;
+				*/
 				
 			}
 
@@ -403,6 +414,20 @@ package com.mikechambers.pewpew.engine
 				var enemyBounds:Rectangle = enemy.getBounds(this);
 				if(!eBmpData)
 				{
+					
+					var eBmpData:BitmapData = new BitmapData(enemyBounds.width, 
+														enemyBounds.height, 
+														true, 0);
+				
+					//this might not work for items which rotate
+					var enemyOffset:Matrix = enemy.transform.matrix;
+					enemyOffset.tx = enemy.x - enemyBounds.x;
+					enemyOffset.ty = enemy.y - enemyBounds.y;
+				
+					eBmpData.draw(enemy, enemyOffset);
+					enemyBmpDataLookup[classRef] = eBmpData;
+										
+					/*
 					var eBmpData:BitmapData = new BitmapData(enemyBounds.width, 
 														enemyBounds.height, 
 														true, 0);
@@ -432,6 +457,7 @@ import flash.geom.Matrix3D;
 					//eBmpData.draw(enemy, enemyOffset);
 					
 					enemyBmpDataLookup[classRef] = eBmpData;
+					*/
 				}
 	
 				collisionPoint2.x = enemyBounds.x;

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application xmlns="http://ns.adobe.com/air/application/2.0beta">
-
 	<supportedProfiles>desktop mobileDevice</supportedProfiles>
-		
 	<iPhone>
-		<bundleSeedID>6KN5FS36Q2</bundleSeedID>
+		<bundleSeedID>3B7MN5LYV9</bundleSeedID>
 		<InfoAdditions>
 			<![CDATA[
 				<key>CTRenderEngine</key>
@@ -12,20 +10,17 @@
 			]]>
 		</InfoAdditions>
 	</iPhone>
-
 	<id>com.mikechambers.pewpew</id>
 	<filename>PewPew</filename>
 	<name>PewPew</name>
 	<version>v1</version>
 	<!-- <description></description> -->
 	<!-- <copyright></copyright> -->
-
 	<initialWindow>
-
 		<autoOrients>false</autoOrients>
 		<fullScreen>true</fullScreen>
 		<aspectRatio>portrait</aspectRatio>
-		<content>src/Main.swf</content>
+		<content>Main.swf</content>
 		<!-- <title></title> -->
 		<systemChrome>standard</systemChrome>
 		<!-- <transparent></transparent> -->
@@ -39,5 +34,19 @@
 		<!-- <y></y> -->
 		<!-- <minSize></minSize> -->
 		<!-- <maxSize></maxSize> -->
-	<maximizable>true</maximizable><minimizable>true</minimizable><transparent>false</transparent></initialWindow>
-<customUpdateUI>false</customUpdateUI><copyright></copyright><description></description><icon><image16x16>AppIconsForAIRPublish/AIRApp_16.png</image16x16><image32x32>AppIconsForAIRPublish/AIRApp_32.png</image32x32><image48x48>AppIconsForAIRPublish/AIRApp_48.png</image48x48><image128x128>AppIconsForAIRPublish/AIRApp_128.png</image128x128></icon></application>
+		<maximizable>true</maximizable>
+		<minimizable>true</minimizable>
+		<transparent>false</transparent>
+	</initialWindow>
+	<customUpdateUI>false</customUpdateUI>
+	<copyright/>
+	<description/>
+	<!--
+	<icon>
+		<image16x16>AppIconsForAIRPublish/AIRApp_16.png</image16x16>
+		<image32x32>AppIconsForAIRPublish/AIRApp_32.png</image32x32>
+		<image48x48>AppIconsForAIRPublish/AIRApp_48.png</image48x48>
+		<image128x128>AppIconsForAIRPublish/AIRApp_128.png</image128x128>
+	</icon>
+	-->
+</application>

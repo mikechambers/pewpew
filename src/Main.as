@@ -38,6 +38,8 @@ package
 		private var gameMenu:GameMenu;
 		private var gameOverScreen:GameOverScreen;
 		
+		public var background:MovieClip;
+		
 		public var fpsView:Sprite;
 		
 		private var titleGraphic:TitleGraphic;
@@ -56,7 +58,7 @@ package
 																		true);
 			
 			tickManager = TickManager.getInstance();
-			tickManager.start();
+			tickManager.start();					
 																		
 			stop();
 		}
