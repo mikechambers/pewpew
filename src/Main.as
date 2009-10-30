@@ -101,7 +101,7 @@ package
 			profileManager.addEventListener(ScreenControlEvent.PROFILE_SELECTED,
 												onProfileSelected);
 												
-			viewManager.displayView(profileManager, ViewManager.SLIDE_FROM_RIGHT);
+			viewManager.displayView(profileManager, ViewManager.NO_TRANSITION);
 			
 
 			
@@ -123,7 +123,7 @@ package
 				gameMenu.addEventListener(ScreenControlEvent.PLAY, onPlaySelect);
 			}
 			
-			viewManager.displayView(gameMenu, ViewManager.SLIDE_FROM_RIGHT);
+			viewManager.displayView(gameMenu, ViewManager.NO_TRANSITION);
 			
 			displayTitleGraphic();
 		}
