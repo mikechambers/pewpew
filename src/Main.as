@@ -60,7 +60,9 @@ package
 			tickManager = TickManager.getInstance();
 			tickManager.start();					
 				
-			background.cacheAsSurface = true;	
+			background.cacheAsSurface = true;
+			//background.mouseEnabled = false;
+			//background.mouseChildren = false;	
 																		
 			stop();
 		}
