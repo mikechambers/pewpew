@@ -33,8 +33,10 @@ package com.mikechambers.pewpew.engine
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	
 
-	import flash.geom.Matrix;	
+	import flash.geom.Matrix;
+	import flash.geom.Matrix3D;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 
@@ -371,35 +373,34 @@ package com.mikechambers.pewpew.engine
 												shipBounds.height, true, 0);
 
 				var shipOffset:Matrix = ship.transform.matrix;
-				shipOffset.tx = ship.x - shipBounds.x;
-				shipOffset.ty = ship.y - shipBounds.y;			
-
-				shipBmpData.draw(ship, shipOffset);
-
-				/*
-				shipBmpData = new BitmapData(shipBounds.width, 
-												shipBounds.height, true, 0);
-				//shipBmpData.draw(ship, null);									
-				//temp
 				
-				import flash.geom.Matrix3D;
-				var shipOffset:Matrix3D = ship.transform.matrix3D;
+				//workaround for bug #2468806
+				if(shipOffset)
+				{
+					shipOffset.tx = ship.x - shipBounds.x;
+					shipOffset.ty = ship.y - shipBounds.y;			
 
-				var rawMatrixData:Vector.<Number> = shipOffset.rawData;
+					shipBmpData.draw(ship, shipOffset);
+				}
+				else
+				{
+					var shipOffset3D:Matrix3D = ship.transform.matrix3D;
 
-				var matrix:Matrix = new Matrix();
-				matrix.a = rawMatrixData[0];
-				matrix.c = rawMatrixData[1];
-				matrix.tx = ship.x - shipBounds.x;
+					var rawMatrixData:Vector.<Number> = shipOffset3D.rawData;
+
+					var matrix:Matrix = new Matrix();
+					matrix.a = rawMatrixData[0];
+					matrix.c = rawMatrixData[1];
+					matrix.tx = ship.x - shipBounds.x;
 				
-				matrix.b = rawMatrixData[4];
-				matrix.d = rawMatrixData[5];
-				matrix.ty = ship.y - shipBounds.y;
+					matrix.b = rawMatrixData[4];
+					matrix.d = rawMatrixData[5];
+					matrix.ty = ship.y - shipBounds.y;
 				
-				ship.transform.matrix3D = null;
-				shipBmpData.draw(ship, matrix);
-				ship.transform.matrix3D = shipOffset;
-				*/
+					ship.transform.matrix3D = null;
+					shipBmpData.draw(ship, matrix);
+					ship.transform.matrix3D = shipOffset3D;
+				}
 				
 			}
 
@@ -421,43 +422,35 @@ package com.mikechambers.pewpew.engine
 				
 					//this might not work for items which rotate
 					var enemyOffset:Matrix = enemy.transform.matrix;
-					enemyOffset.tx = enemy.x - enemyBounds.x;
-					enemyOffset.ty = enemy.y - enemyBounds.y;
-				
-					eBmpData.draw(enemy, enemyOffset);
-					enemyBmpDataLookup[classRef] = eBmpData;
-										
-					/*
-					var eBmpData:BitmapData = new BitmapData(enemyBounds.width, 
-														enemyBounds.height, 
-														true, 0);
-					//eBmpData.draw(enemy, null);
-					//this might not work for items which rotate
-					//var enemyOffset:Matrix = enemy.transform.matrix;
-					//enemyOffset.tx = enemy.x - enemyBounds.x;
-					//enemyOffset.ty = enemy.y - enemyBounds.y;
-				
-				
-					var enemyOffset:Matrix3D = enemy.transform.matrix3D;
-				
-					var rawMatrixData:Vector.<Number> = enemyOffset.rawData;
-
-import flash.geom.Matrix3D;
-					var matrix:Matrix = new Matrix();
-					matrix.a = rawMatrixData[0];
-					matrix.c = rawMatrixData[1];
-					matrix.tx = enemy.x - enemyBounds.x;
-
-					matrix.b = rawMatrixData[4];
-					matrix.d = rawMatrixData[5];
-					matrix.ty = enemy.y - enemyBounds.y;				
-				
-					eBmpData.draw(enemy, matrix);
-				
-					//eBmpData.draw(enemy, enemyOffset);
 					
+					//workaround for bug #2468806
+					if(enemyOffset)
+					{
+						enemyOffset.tx = enemy.x - enemyBounds.x;
+						enemyOffset.ty = enemy.y - enemyBounds.y;
+				
+						eBmpData.draw(enemy, enemyOffset);
+	
+					}
+					else
+					{
+						var enemyOffset3D:Matrix3D = enemy.transform.matrix3D;
+						
+						var rawMatrixData:Vector.<Number> = enemyOffset3D.rawData;
+
+						var matrix:Matrix = new Matrix();
+						matrix.a = rawMatrixData[0];
+						matrix.c = rawMatrixData[1];
+						matrix.tx = enemy.x - enemyBounds.x;
+
+						matrix.b = rawMatrixData[4];
+						matrix.d = rawMatrixData[5];
+						matrix.ty = enemy.y - enemyBounds.y;				
+
+						eBmpData.draw(enemy, matrix);						
+					}				
+
 					enemyBmpDataLookup[classRef] = eBmpData;
-					*/
 				}
 	
 				collisionPoint2.x = enemyBounds.x;
