@@ -59,6 +59,8 @@ package
 			
 			tickManager = TickManager.getInstance();
 			tickManager.start();					
+				
+			background.cacheAsSurface = true;	
 																		
 			stop();
 		}

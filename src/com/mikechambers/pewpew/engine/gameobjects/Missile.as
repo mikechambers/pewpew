@@ -24,39 +24,10 @@ package com.mikechambers.pewpew.engine.gameobjects
 			//addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, 
 			//															true); 
 		}
-		
-		/*
-		protected override function onStageAdded(e:Event):void
-		{
-			//super.onStageAdded(e);
-			//addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-			//addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 0, true);
-			//removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-		}
-		
-		protected override function onStageRemoved(e:Event):void
-		{
-			//super.onStageRemoved(e);
-			//removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			//removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved); 
-			//addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, 
-			//															true);
-		}
-		*/
+
 		
 		protected override function onTick(e:TickEvent):void
 		{
-			/*
-			if(!getBounds(parent).intersects(bounds))
-			{
-				var eie:GameObjectEvent = new GameObjectEvent(GameObjectEvent.REMOVE);
-				dispatchEvent(eie);
-				
-				return;
-			}
-			*/
-			
-			
 			var shouldRemove:Boolean = false;
 			if(x + width < 0 || x > bounds.width)
 			{
@@ -81,14 +52,5 @@ package com.mikechambers.pewpew.engine.gameobjects
 			this.x += vx;
 			this.y += vy;
 		}
-		
-		/*
-		public function dealloc():void
-		{
-			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
-		}
-		*/
 	}
 }
