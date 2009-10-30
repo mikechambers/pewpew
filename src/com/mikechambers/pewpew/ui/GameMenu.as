@@ -10,23 +10,24 @@ package com.mikechambers.pewpew.ui
 	public class GameMenu extends Sprite
 	{
 		public var playButton:SimpleButton;
-		public var highScoresButton:SimpleButton;
-		public var statsButton:SimpleButton;
+		//public var highScoresButton:SimpleButton;
+		//public var statsButton:SimpleButton;
 		
 		public function GameMenu()
 		{
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 			
 			playButton.label = "Play";
-			highScoresButton.label = "High Scores";
-			statsButton.label = "Stats";
+			//highScoresButton.label = "High Scores";
+			//statsButton.label = "Stats";
 		}
 		
 		private function onStageAdded(e:Event):void
 		{
 			playButton.addEventListener(MouseEvent.CLICK, onPlayClick, false, 
 																	0, true);
-																	
+			
+			/*												
 			highScoresButton.addEventListener(MouseEvent.CLICK, 
 													onHighScoresClick, false, 
 																	0, true);
@@ -34,7 +35,7 @@ package com.mikechambers.pewpew.ui
 			statsButton.addEventListener(MouseEvent.CLICK, onStatsClick	, 
 																	false, 
 																	0, true);
-			
+			*/
 			addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 
 																	0, true);
 		}
@@ -42,11 +43,13 @@ package com.mikechambers.pewpew.ui
 		private function onStageRemoved(e:Event):void
 		{
 			playButton.removeEventListener(MouseEvent.CLICK, onPlayClick);
+			
+			/*
 			highScoresButton.removeEventListener(MouseEvent.CLICK, 
 															onHighScoresClick);
 															
 			statsButton.removeEventListener(MouseEvent.CLICK, onStatsClick);
-			
+			*/
 			removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
 			
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded);
@@ -60,6 +63,7 @@ package com.mikechambers.pewpew.ui
 			dispatchEvent(sce);
 		}
 		
+		/*
 		private function onHighScoresClick(e:MouseEvent):void
 		{
 			var sce:ScreenControlEvent = 
@@ -75,5 +79,6 @@ package com.mikechambers.pewpew.ui
 							
 			dispatchEvent(sce);
 		}
+		*/
 	}
 }
