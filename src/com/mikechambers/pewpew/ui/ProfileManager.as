@@ -12,8 +12,8 @@ package com.mikechambers.pewpew.ui
 		public var labelField:TextField;
 		
 		public var profileButton1:SimpleButton;
-		public var profileButton2:SimpleButton;
-		public var profileButton3:SimpleButton;
+		//public var profileButton2:SimpleButton;
+		//public var profileButton3:SimpleButton;
 		
 		public function ProfileManager()
 		{
@@ -24,8 +24,8 @@ package com.mikechambers.pewpew.ui
 		public function onStageAdded(e:Event):void
 		{
 			profileButton1.label = "mesh";
-			profileButton2.label = "Profile 2";
-			profileButton3.label = "New";
+			//profileButton2.label = "Profile 2";
+			//profileButton3.label = "New";
 			
 			profileButton1.addEventListener(MouseEvent.CLICK, onButtonClick, 
 																	false, 
@@ -38,10 +38,13 @@ package com.mikechambers.pewpew.ui
 		private function onStageRemoved(e:Event):void
 		{
 			profileButton1.removeEventListener(MouseEvent.CLICK, onButtonClick);
+			
+			/*
 			profileButton2.removeEventListener(MouseEvent.CLICK, 
 															onButtonClick);
 															
 			profileButton3.removeEventListener(MouseEvent.CLICK, onButtonClick);
+			*/
 			
 			removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
 			
