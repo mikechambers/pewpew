@@ -150,30 +150,6 @@ package com.mikechambers.pewpew.engine
 	
 		private function reset():void
 		{
-			/*
-			if(!target)
-			{
-				target = new Target();
-				addChild(target);
-			}
-			*/
-			
-			//addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-			
-			/*
-			if(timer)
-			{
-				timer.reset();
-			}
-			else
-			{
-				timer = new Timer(GAME_CHECK_INTERVAL);
-			}
-			
-			timer.addEventListener(TimerEvent.TIMER, onGameCheck, false, 0, 
-																		true);
-			timer.start();
-			*/
 			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
 			
 		
@@ -315,16 +291,20 @@ package com.mikechambers.pewpew.engine
 				return;
 			}
 			
-			//check to see if there is already one
-			var enemy:UFOEnemy = new UFOEnemy(bounds, ship, 1 + (wave/5));
-			enemy.addEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed, 
+			if(!ufoOnStage)
+			{
+				var enemy:UFOEnemy = new UFOEnemy(bounds, ship, 1 + (wave/5));
+				enemy.addEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed, 
 															false, 0, true);
-			enemy.addEventListener(GameObjectEvent.REMOVE, onRemoveItem, false, 
+				enemy.addEventListener(GameObjectEvent.REMOVE, onRemoveItem, false, 
 																	0, true);
 
-			ufoOnStage = true;
-			addChild(enemy);
-			enemies.push(enemy);			
+				ufoOnStage = true;
+				addChild(enemy);
+				enemies.push(enemy);		
+			}
+			
+			
 		}
 		
 		/********* game engine APIs **********/

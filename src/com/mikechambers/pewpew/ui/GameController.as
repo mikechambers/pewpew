@@ -22,6 +22,9 @@ package com.mikechambers.pewpew.ui
 																		true);
 																		
 			tickManager = TickManager.getInstance();
+			
+			mouseEnabled = false;
+			mouseChildren = false;
 		}
 	
 		private function onStageAdded(e:Event):void
