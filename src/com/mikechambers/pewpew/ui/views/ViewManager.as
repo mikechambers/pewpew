@@ -3,9 +3,14 @@ package com.mikechambers.pewpew.ui.views
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	
+	//import gs.TweenLite;	
+	
+	//commented out a bunch of stuff so Tween library is not compiled
+	//since it is not being used right now
+	
 	public class ViewManager
 	{
-		public static const SLIDE_FROM_RIGHT:String = "slideFromRight";
+		//public static const SLIDE_FROM_RIGHT:String = "slideFromRight";
 		public static const NO_TRANSITION:String = "noTransition";
 		
 		private var _overlayView:DisplayObject;
@@ -17,7 +22,6 @@ package com.mikechambers.pewpew.ui.views
 			_container = container;
 		}
 		
-		import gs.TweenLite;
 		public function displayView(view:DisplayObject, transitionType:String):void
 		{
 			var containerWidth:Number = _container.stage.stageWidth;
@@ -32,12 +36,14 @@ package com.mikechambers.pewpew.ui.views
 				
 				switch(transitionType)
 				{
+					/*
 					case SLIDE_FROM_RIGHT:
 					{
 						TweenLite.to(_currentView, 1, {x:containerWidth * -1, 
 										onComplete:tweenOutComplete, onCompleteParams:[_currentView]});
 						break;
 					}
+					*/
 					case NO_TRANSITION:
 					{
 						//_container.removeChild(_currentView);
@@ -52,11 +58,13 @@ package com.mikechambers.pewpew.ui.views
 				
 				switch(transitionType)
 				{
+					/*
 					case SLIDE_FROM_RIGHT:
 					{
 						TweenLite.to(view, 1, {x:0, onComplete:tweenInComplete, onCompleteParams:[view]});
 						break;
 					}
+					*/
 					case NO_TRANSITION:
 					{
 						view.x = 0;
