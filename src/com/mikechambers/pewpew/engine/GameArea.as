@@ -636,6 +636,7 @@ package com.mikechambers.pewpew.engine
 		
 		private function onDeathPauseTimer(e:TimerEvent):void
 		{						
+			e.stopImmediatePropagation();
 			resetEnemies();
 			initShip();			
 			
@@ -652,6 +653,7 @@ package com.mikechambers.pewpew.engine
 		
 		private function onSpawnShipTimer(e:TimerEvent):void
 		{
+			e.stopImmediatePropagation();
 			//should we reuse this?
 			deathPauseTimer.stop();
 			deathPauseTimer.removeEventListener(TimerEvent.TIMER, 

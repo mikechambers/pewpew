@@ -186,6 +186,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		private function onTimer(e:TimerEvent):void
 		{
+			e.stopImmediatePropagation();
 			fire();
 		}
 	}
