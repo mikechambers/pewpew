@@ -34,7 +34,7 @@ package
 		
 		//instantiated within FLA
 		private var gameArea:GameArea;
-		private var profileManager:ProfileManager;
+		//private var profileManager:ProfileManager;
 		private var gameMenu:GameMenu;
 		private var gameOverScreen:GameOverScreen;
 		
@@ -100,23 +100,31 @@ package
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 						
+			/*			
 			profileManager = new ProfileManager();
 			
 			profileManager.addEventListener(ScreenControlEvent.PROFILE_SELECTED,
 												onProfileSelected);
 												
 			viewManager.displayView(profileManager, ViewManager.NO_TRANSITION);
-			
+			*/
 
-			
+			/*
 			fpsView = new FPSView();
 			fpsView.y = stage.stageHeight - fpsView.height;
 			addChild(fpsView);
+			*/
 			
+			gameMenu = new GameMenu();
+			gameMenu.addEventListener(ScreenControlEvent.PLAY, onPlaySelect);
+
+
+			viewManager.displayView(gameMenu, ViewManager.NO_TRANSITION);			
 			
 			displayTitleGraphic();
 		}
 		
+		/*
 		private function onProfileSelected(e:ScreenControlEvent):void
 		{
 			//gotoAndStop(SELECT_SCREEN);
@@ -131,6 +139,7 @@ package
 			
 			displayTitleGraphic();
 		}
+		*/
 		
 		private function onPlaySelect(e:ScreenControlEvent):void
 		{
