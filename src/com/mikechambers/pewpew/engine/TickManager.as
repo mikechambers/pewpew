@@ -59,6 +59,7 @@ package com.mikechambers.pewpew.engine
 		
 		private function onTimer(e:TimerEvent):void
 		{
+			e.stopImmediatePropagation();
 			var te:TickEvent = new TickEvent(TickEvent.TICK);
 			te.fpsRate = FPS_RATE;
 			
