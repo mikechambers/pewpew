@@ -18,15 +18,33 @@ package com.mikechambers.pewpew.engine.gameobjects
 		public var damage:Number = 100;
 		
 		//should this extend enemy?
-		public function Missile(angle:Number, bounds:Rectangle)
+		public function Missile()
 		{
-			super(bounds);
-			direction = angle * Math.PI / 180;
+			super(null);
 			
 			//addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, 
 			//															true); 
 		}
+		
+		public function set angle(value:Number):void
+		{
+			direction = value * Math.PI / 180;
+		}
 
+		public function set boundsRect(value:Rectangle):void
+		{
+			this.bounds = value;
+		}
+		
+		public function resume():void
+		{
+			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
+		}
+		
+		public function pause():void
+		{
+			tickManager.removeEventListener(TickEvent.TICK, onTick);
+		}
 		
 		protected override function onTick(e:TickEvent):void
 		{
@@ -42,7 +60,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 			
 			if(shouldRemove)
 			{
-				var eie:GameObjectEvent = new GameObjectEvent(GameObjectEvent.REMOVE);
+				var eie:GameObjectEvent = new GameObjectEvent(GameObjectEvent.REMOVE_MISSILE);
 				dispatchEvent(eie);				
 				
 				return;
