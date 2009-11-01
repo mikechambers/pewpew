@@ -13,6 +13,8 @@ package
 
 	import com.mikechambers.pewpew.engine.TickManager;
 	import com.mikechambers.pewpew.engine.events.TickEvent;
+	import com.mikechambers.pewpew.engine.SoundManager;	
+	
 	
 	import flash.display.Sprite;
 	import flash.display.MovieClip;
@@ -93,13 +95,16 @@ package
 		}
 		
 		
-		
 		private function onStageAdded(e:Event):void
 		{
 			viewManager = new ViewManager(this);
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
-						
+			
+			
+			
+			//this will create instance, and initialize sounds;
+			SoundManager.getInstance();
 			/*			
 			profileManager = new ProfileManager();
 			

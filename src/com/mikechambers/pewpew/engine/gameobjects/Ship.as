@@ -17,6 +17,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.display.DisplayObject;
 	
 	import com.mikechambers.pewpew.engine.pools.MissilePool;
+	import com.mikechambers.pewpew.engine.SoundManager;		
 	
 	import flash.geom.Point;
 	
@@ -32,7 +33,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 		private var timer:Timer;
 		private static const FIRE_INTERVAL:Number = 300;
 		
-		private static var missileSound:PewSound;
+		private var missileSound:PewSound;
 		
 		private var gameController:GameController;
 		
@@ -49,7 +50,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 			
 			if(!missileSound)
 			{
-				missileSound = new PewSound();
+				missileSound = PewSound(SoundManager.getInstance().getSound(SoundManager.FIRE_SOUND));
 			}
 			
 			this.gameController = gameController;
@@ -87,7 +88,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		public function destroy():void
 		{
-			var s:ExplosionSound = new ExplosionSound();
+			var s:ExplosionSound = ExplosionSound(SoundManager.getInstance().getSound(SoundManager.EXPLOSION_SOUND));
 			s.play();
 		}
 		
