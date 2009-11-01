@@ -16,6 +16,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.utils.Timer;
 	import flash.display.DisplayObject;
 	
+	import com.mikechambers.pewpew.engine.pools.MissilePool;
+	
 	import flash.geom.Point;
 	
 	import com.mikechambers.pewpew.engine.TickManager;
@@ -33,6 +35,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 		private var missileSound:PewSound;
 		
 		private var gameController:GameController;
+		
+		private var missilePool:MissilePool;
 		
 		//Should we have this extend enemy? and rename it?
 		public function Ship(bounds:Rectangle, 
@@ -58,6 +62,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 
 			timer = new Timer(FIRE_INTERVAL);
 			timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
+			
+			missilePool = MissilePool.getInstance();
 		}
 		
 		protected override function onStageRemoved(e:Event):void
@@ -157,7 +163,10 @@ package com.mikechambers.pewpew.engine.gameobjects
 		{			
 			missileSound.play();
 			
-			var m:Missile = new Missile(this.rotation, bounds);
+			var m:Missile = missilePool.getMissile();
+			m.angle = this.rotation;
+			m.boundsRect = bounds;
+			
 			var e:FireEvent = new FireEvent(FireEvent.FIRE);
 			e.projectile = m;
 			dispatchEvent(e);

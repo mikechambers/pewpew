@@ -22,6 +22,8 @@ package com.mikechambers.pewpew.engine
 	import com.mikechambers.pewpew.engine.gameobjects.BasicEnemy;
 	import com.mikechambers.pewpew.engine.gameobjects.Explosion;
 	
+	import com.mikechambers.pewpew.engine.pools.MissilePool;	
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
@@ -87,6 +89,8 @@ package com.mikechambers.pewpew.engine
 	
 		public var gameController:GameController;
 	
+		private var missilePool:MissilePool;
+	
 		public function GameArea()
 		{			
 			enemies = new Vector.<Enemy>();
@@ -107,13 +111,14 @@ package com.mikechambers.pewpew.engine
 	
 		private function onStageAdded(e:Event):void
 		{
+			missilePool = MissilePool.getInstance();
 			bounds = new Rectangle(0,scoreBar.height, stage.stageWidth, 
 										stage.stageHeight - scoreBar.height);
 			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 			
 			if(!missile)
 			{
-				var missile:Missile = new Missile(0, bounds);
+				var missile:Missile = new Missile();
 			
 				//hack to work around AIR bug #2412471
 				addChild(missile);
@@ -182,12 +187,17 @@ package com.mikechambers.pewpew.engine
 		{
 			//todo : performace : if this cast is slow, we can inline the loop
 			removeAllSpritesFromVector(Vector.<Sprite>(enemies));
+			
 		}		
 		
 		private function removeAllMissiles():void
 		{
-			//todo : performace : if this cast is slow, we can inline the loop
-			removeAllSpritesFromVector(Vector.<Sprite>(missiles));
+			var len:int = missiles.length;
+			
+			for(var i:int = len - 1; i >= 0; i--)
+			{
+				removeMissile(missiles[i]);
+			}
 		}
 
 		private function resetEnemies():void
@@ -471,7 +481,7 @@ package com.mikechambers.pewpew.engine
 										collisionPoint2, 255))
 					{
 						//trace("hit");
-						removeItem(missile);
+						removeMissile(missile);
 						enemy.hit(missile.damage);
 
 						if(enemies.length == 0)
@@ -510,8 +520,6 @@ package com.mikechambers.pewpew.engine
 		private function destroyShip():void
 		{			
 			createExplosion(ship.x, ship.y);
-			
-			trace("destroyShip : " + ship);
 			
 			ship.removeEventListener(FireEvent.FIRE, onShipFire);
 			ship.destroy();
@@ -552,10 +560,6 @@ package com.mikechambers.pewpew.engine
 														onDeathPauseTimer, 
 														false, 0, true);
 				deathPauseTimer.start();
-				
-				//trace("destroyShip : remove enterframe");
-				//removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-				//timer.stop();
 
 				tickManager.removeEventListener(TickEvent.TICK, onTick);
 			}
@@ -564,13 +568,7 @@ package com.mikechambers.pewpew.engine
 		
 		private function removeItem(s:Sprite):void
 		{
-			/*
-			if(!this.contains(s))
-			{
-				return;
-			}
-			*/
-			
+
 			s.removeEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed);
 			s.removeEventListener(GameObjectEvent.REMOVE, onRemoveItem);
 			
@@ -582,12 +580,16 @@ package com.mikechambers.pewpew.engine
 			}				
 									
 			var index:int;
+			/*
 			if(s is Missile)
 			{
 				index = missiles.indexOf(s);
 				missiles.splice(index, 1);
 			}
-			else if(s is Enemy)
+			*/
+			
+			//todo: we dont need this if
+			if(s is Enemy)
 			{
 				index = enemies.indexOf(s);
 				enemies.splice(index, 1);
@@ -689,10 +691,33 @@ package com.mikechambers.pewpew.engine
 			m.x = ship.x;
 			m.y = ship.y;
 			
-			m.addEventListener(GameObjectEvent.REMOVE, onRemoveItem, false, 0, true);
+			m.addEventListener(GameObjectEvent.REMOVE_MISSILE, onRemoveMissile, false, 0, true);
 			
-			addChild(m);
+			if(!contains(m))
+			{
+				addChild(m);
+			}
+			else
+			{
+				m.resume();
+			}
+			
 			missiles.push(m);
+		}
+		
+		private function onRemoveMissile(e:GameObjectEvent):void
+		{
+			removeMissile(Missile(e.target));
+		}
+		
+		private function removeMissile(missile:Missile):void
+		{
+			missilePool.returnMissile(missile);
+			
+			var index:int = missiles.indexOf(missile);
+			missiles.splice(index, 1);
+			
+			//removeChild(missile);
 		}
 		
 		private function onRemoveItem(e:GameObjectEvent):void

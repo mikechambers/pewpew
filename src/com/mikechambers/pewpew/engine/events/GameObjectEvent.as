@@ -5,6 +5,7 @@ package com.mikechambers.pewpew.engine.events
 	public class GameObjectEvent extends Event
 	{
 		public static const REMOVE:String = "onItemShouldRemove";
+		public static const REMOVE_MISSILE:String = "onItemShouldRemoveMissile";
 		public static const DESTROYED:String = "onItemDestroyed";
 		
 		public function GameObjectEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
