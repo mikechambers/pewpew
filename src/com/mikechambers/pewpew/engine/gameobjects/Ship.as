@@ -49,7 +49,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		protected override function onStageAdded(e:Event):void
 		{
-			trace("onStageAdded");
 			super.onStageAdded(e);
 			
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false, 
@@ -63,7 +62,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		protected override function onStageRemoved(e:Event):void
 		{
-			trace("onStageRemoved");
 			super.onStageRemoved(e);
 
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
