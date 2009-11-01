@@ -6,11 +6,13 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
+	
+	import com.mikechambers.pewpew.engine.TickManager;
 
 	//todo: should we make this extend Enemy?
 	public class Missile extends GameObject
 	{
-		private static const SPEED:Number = 6.0;
+		private static const SPEED:Number = 6.0 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		private var direction:Number;
 		
 		public var damage:Number = 100;

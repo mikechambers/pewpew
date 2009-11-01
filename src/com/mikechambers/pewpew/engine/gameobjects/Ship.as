@@ -17,10 +17,12 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.display.DisplayObject;
 	
 	import flash.geom.Point;
+	
+	import com.mikechambers.pewpew.engine.TickManager;
 
 	public class Ship extends GameObject
 	{
-		private var speed:Number = 3.0;
+		private static const SPEED:Number = 3.0 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		//private var bounds:Rectangle;
 		
 		//private var target:Target;
@@ -91,7 +93,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 				return;
 			}
 
-			
 			if(!mouseDown)
 			{
 				return;
@@ -100,8 +101,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 			var radians:Number = gameController.angle;
 			this.rotation = MathUtil.radiansToDegrees(radians);
 			
-			var vx:Number = Math.cos(radians) * speed;
-			var vy:Number = Math.sin(radians) * speed;
+			var vx:Number = Math.cos(radians) * SPEED;
+			var vy:Number = Math.sin(radians) * SPEED;
 	
 			var tempX:Number = this.x + vx;
 			var tempY:Number = this.y + vy;	
@@ -111,7 +112,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 				tempY < bounds.top ||
 				tempY > bounds.bottom)
 			{
-				trace("over");
 				return;
 			}					
 						
@@ -121,12 +121,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		public override function dealloc():void
 		{
-			trace("ship dealloc");
 			super.dealloc();
-			//removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			//removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			//removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
-			
 			
 			if(timer)
 			{

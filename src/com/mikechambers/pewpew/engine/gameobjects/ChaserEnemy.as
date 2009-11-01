@@ -8,12 +8,14 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.geom.Rectangle;
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
+	
+	import com.mikechambers.pewpew.engine.TickManager;
 
 	public class ChaserEnemy extends Enemy
 	{
 
 		private static const POINT_BASE:uint = 200;
-		private static const BASE_SPEED:Number = 1.5;
+		private static const BASE_SPEED:Number = 3 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		
 		//private var vx:Number;
 		//private var vy:Number;

@@ -9,10 +9,12 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.media.SoundChannel;
 	import flash.display.DisplayObject;
 
+	import com.mikechambers.pewpew.engine.TickManager;
+
 	public class UFOEnemy extends Enemy
 	{
 		private static const POINT_BASE:int = 150;
-		private static const SPEED:Number = 2.0;
+		private static const SPEED:Number = 2.0  * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		
 		private var vx:Number;
 		private var vy:Number;

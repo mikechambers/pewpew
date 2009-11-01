@@ -8,11 +8,13 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
 
+	import com.mikechambers.pewpew.engine.TickManager;
+
 	public class BasicEnemy extends Enemy
 	{
 
 		private static const POINT_BASE:uint = 100;
-		private static const SPEED:Number = 2.0;
+		private static const SPEED:Number = 2.0 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		private var direction:Number; // in radians
 		//private var bounds:Rectangle;	
 		
