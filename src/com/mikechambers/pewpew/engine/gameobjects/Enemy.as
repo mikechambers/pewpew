@@ -13,6 +13,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 	{
 
 		public static const DEFAULT_POINT_VAULE:int = 100;
+		
+		private static var explosionSound:ExplosionSound;
 
 		public function Enemy(bounds:Rectangle, 
 										target:DisplayObject = null, 
@@ -20,6 +22,11 @@ package com.mikechambers.pewpew.engine.gameobjects
 		{
 			super(bounds, target, modifier);
 			
+			
+			if(!explosionSound)
+			{
+				explosionSound = new ExplosionSound();
+			}
 		}
 		
 		public function get pointValue():int
@@ -39,8 +46,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		protected function destroy():void
 		{
-			var s:ExplosionSound = new ExplosionSound();
-			s.play();			
+			explosionSound.play();			
 			
 			var e:GameObjectEvent = new GameObjectEvent(GameObjectEvent.DESTROYED);
 			dispatchEvent(e);
