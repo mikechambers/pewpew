@@ -1,7 +1,7 @@
 package com.mikechambers.pewpew.utils
 {
 
-	public class NumberUtil
+	public final class NumberUtil
 	{
 	
 		//todo: we could make different versions for differnt num types

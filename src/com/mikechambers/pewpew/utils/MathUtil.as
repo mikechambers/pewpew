@@ -2,7 +2,7 @@ package com.mikechambers.pewpew.utils
 {
 	import flash.geom.Point;
 	
-	public class MathUtil
+	public final class MathUtil
 	{
 		//todo: reuse
 		public static function degreesToRadians(degrees:Number):Number
