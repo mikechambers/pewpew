@@ -32,7 +32,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 		private var timer:Timer;
 		private static const FIRE_INTERVAL:Number = 300;
 		
-		private var missileSound:PewSound;
+		private static var missileSound:PewSound;
 		
 		private var gameController:GameController;
 		
@@ -47,7 +47,11 @@ package com.mikechambers.pewpew.engine.gameobjects
 			
 			super(bounds, target, modifier);
 			
-			missileSound = new PewSound();
+			if(!missileSound)
+			{
+				missileSound = new PewSound();
+			}
+			
 			this.gameController = gameController;
 		}
 		
@@ -135,7 +139,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 			}
 			
 			//what happens if sound is still playing
-			missileSound = null;
+			//missileSound = null;
 			
 			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
