@@ -89,7 +89,7 @@ package com.mikechambers.pewpew.engine
 	
 		public var gameController:GameController;
 	
-		private var missilePool:MissilePool;
+		private var missilePool:MissilePool;		
 	
 		public function GameArea()
 		{			
@@ -101,8 +101,6 @@ package com.mikechambers.pewpew.engine
 		
 			mouseEnabled = false;
 			mouseChildren = false;
-			
-			tickManager = TickManager.getInstance();
 		}
 		
 		/*************** initialization *************/
@@ -148,6 +146,13 @@ package com.mikechambers.pewpew.engine
 		//should we call this from onStageAdded?
 		public function start():void
 		{
+			
+			if(!tickManager)
+			{
+				tickManager = TickManager.getInstance();
+				tickManager.start();
+			}
+						
 			reset();
 			initShip();
 			addEnemies();			
@@ -578,26 +583,13 @@ package com.mikechambers.pewpew.engine
 			{
 				ufoOnStage = false;
 			}				
-									
-			var index:int;
-			/*
-			if(s is Missile)
-			{
-				index = missiles.indexOf(s);
-				missiles.splice(index, 1);
-			}
-			*/
+
+			var index:int = enemies.indexOf(s);
+			enemies.splice(index, 1);
 			
-			//todo: we dont need this if
-			if(s is Enemy)
+			if(enemies.length < 1 && lives > -1)
 			{
-				index = enemies.indexOf(s);
-				enemies.splice(index, 1);
-				
-				if(enemies.length < 1 && lives > -1)
-				{
-					waveCompleted();
-				}
+				waveCompleted();
 			}
 			
 			IMemoryManageable(s).dealloc();
@@ -714,10 +706,10 @@ package com.mikechambers.pewpew.engine
 		{
 			missilePool.returnMissile(missile);
 			
+			missile.removeEventListener(GameObjectEvent.REMOVE_MISSILE, onRemoveMissile);
+			
 			var index:int = missiles.indexOf(missile);
 			missiles.splice(index, 1);
-			
-			//removeChild(missile);
 		}
 		
 		private function onRemoveItem(e:GameObjectEvent):void

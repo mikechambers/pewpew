@@ -10,8 +10,7 @@ package
 	import flash.display.StageQuality;
 	
 	import com.mikechambers.pewpew.ui.FPSView;
-
-	import com.mikechambers.pewpew.engine.TickManager;
+	
 	import com.mikechambers.pewpew.engine.events.TickEvent;
 	import com.mikechambers.pewpew.engine.SoundManager;	
 	
@@ -48,7 +47,7 @@ package
 		
 		private var viewManager:ViewManager;
 		
-		private var tickManager:TickManager;
+
 		
 		//import flash.display.StageQuality;
 		public function Main()
@@ -57,10 +56,7 @@ package
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded, false, 0, 
-																		true);
-			
-			tickManager = TickManager.getInstance();
-			tickManager.start();					
+																		true);			
 				
 			background.cacheAsSurface = true;
 			//background.mouseEnabled = false;
