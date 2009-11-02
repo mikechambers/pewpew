@@ -40,15 +40,13 @@ package com.mikechambers.pewpew.engine.pools
 			
 			if(pool.length)
 			{
-				missile = pool.shift();
+				missile = pool.pop();
 			}
 			else
 			{
-				trace("NEW");
 				missile = new Missile();
 			}
 			
-			trace("IN : " + pool.length);
 			return missile;
 		}
 		
@@ -58,8 +56,7 @@ package com.mikechambers.pewpew.engine.pools
 			missile.pause();
 			missile.x = -20;
 			missile.y = -20;
-			
-			trace("OUT : " + pool.length);
+
 		}
 		
 		
