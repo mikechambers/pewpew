@@ -694,6 +694,7 @@ package com.mikechambers.pewpew.engine
 		
 		private function onRemoveMissile(e:GameObjectEvent):void
 		{
+			e.stopImmediatePropagation();
 			removeMissile(Missile(e.target));
 		}
 		
@@ -709,6 +710,7 @@ package com.mikechambers.pewpew.engine
 		
 		private function onRemoveItem(e:GameObjectEvent):void
 		{
+			e.stopImmediatePropagation();
 			removeItem(Sprite(e.target));
 		}	
 	}
