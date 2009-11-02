@@ -660,6 +660,7 @@ package com.mikechambers.pewpew.engine
 		
 		private function onEnemyDestroyed(e:GameObjectEvent):void
 		{
+			e.stopImmediatePropagation();
 			var enemy:Enemy = Enemy(e.target);
 			
 			createExplosion(enemy.x + enemy.width, enemy.y + enemy.height);
