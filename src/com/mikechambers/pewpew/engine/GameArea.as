@@ -80,10 +80,8 @@ package com.mikechambers.pewpew.engine
 		private var shipBmpData:BitmapData;
 		private var oldShipHash:int = 0;
 		
-		//private var frameCount:int = 0;
 		private var enemyBmpDataLookup:Dictionary = new Dictionary();		
 		
-		//private var timer:Timer;
 		private var tickManager:TickManager;
 		private var tickCount:uint = 0;
 	
@@ -143,10 +141,8 @@ package com.mikechambers.pewpew.engine
 	
 		/************ controll APIS ****************/
 	
-		//should we call this from onStageAdded?
 		public function start():void
 		{
-			
 			if(!tickManager)
 			{
 				tickManager = TickManager.getInstance();
@@ -162,17 +158,15 @@ package com.mikechambers.pewpew.engine
 		{
 			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
 			
-		
 			tickCount = 0;
 			removeAllEnemies();
 			removeAllMissiles();
 
-			
 			lives = DEFAULT_LIVES;
 			score = 0;
 			wave = 1;
 			
-			//remove this to a setter so we can set it in one place
+			//todo: move this to a setter so we can set it in one place
 			scoreBar.score = score;
 			scoreBar.lives = lives;
 			scoreBar.wave = wave;
@@ -207,6 +201,7 @@ package com.mikechambers.pewpew.engine
 
 		private function resetEnemies():void
 		{			
+			//todo: should profile using for in loop
 			for each(var e:Enemy in enemies)
 			{
 				removeChild(e);
@@ -230,7 +225,6 @@ package com.mikechambers.pewpew.engine
 			ship.addEventListener(FireEvent.FIRE, onShipFire, false, 0, true);
 			
 			addChild(ship);
-			//target.ship = ship;
 			
 			ship.x = 200;
 			ship.y = 200;
@@ -678,6 +672,7 @@ package com.mikechambers.pewpew.engine
 
 		private function onShipFire(e:FireEvent):void
 		{
+			e.stopImmediatePropagation();
 			var m:Missile = e.projectile;
 			
 			m.x = ship.x;
