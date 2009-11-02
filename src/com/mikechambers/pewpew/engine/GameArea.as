@@ -338,10 +338,9 @@ package com.mikechambers.pewpew.engine
 			//only check every 2 frames
 			if((tickCount % 2) != 0)
 			{
-				//return;
+				return;
 			}
 			
-			//check this
 			if(!ship)
 			{
 				return;
@@ -458,8 +457,6 @@ package com.mikechambers.pewpew.engine
 					{
 						destroyShip();
 
-						//todo: this may cause issues since we are removing 
-						//it in the loop
 						removeItem(enemy);
 						return;				
 					}
@@ -490,8 +487,6 @@ package com.mikechambers.pewpew.engine
 					}
 				}
 			}
-			
-			//shipBmpData.dispose();
 		}
 				
 		private function waveCompleted():void
@@ -567,7 +562,6 @@ package com.mikechambers.pewpew.engine
 		
 		private function removeItem(s:Sprite):void
 		{
-
 			s.removeEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed);
 			s.removeEventListener(GameObjectEvent.REMOVE, onRemoveItem);
 			
