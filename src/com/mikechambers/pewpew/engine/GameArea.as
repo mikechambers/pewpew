@@ -593,6 +593,8 @@ package com.mikechambers.pewpew.engine
 		
 		private function onExplosionComplete(e:GameEvent):void
 		{
+			e.stopImmediatePropagation();
+			
 			var explosion:Explosion = Explosion(e.target);
 			explosion.removeEventListener(GameEvent.EXPLOSION_COMPLETE, 
 														onExplosionComplete);
@@ -602,6 +604,8 @@ package com.mikechambers.pewpew.engine
 		
 		private function onWaveViewCompleted(e:GameEvent):void
 		{
+			e.stopImmediatePropagation();
+			
 			removeChild(waveCompletedView);
 			waveCompletedView.removeEventListener(GameEvent.WAVE_VIEW_COMPLETE, 
 											onWaveViewCompleted);
@@ -649,11 +653,7 @@ package com.mikechambers.pewpew.engine
 			deathPauseTimer = null;
 			
 			restartEnemies();
-			
-			//addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-			
-			//timer.reset();
-			//timer.start();
+
 			tickCount = 0;
 			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
 		}		
