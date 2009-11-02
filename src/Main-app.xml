@@ -49,4 +49,4 @@
 		<image128x128>AppIconsForAIRPublish/AIRApp_128.png</image128x128>
 	</icon>
 	-->
-</application>
+<icon><image57x57>AppIconsForAIRPublish/Icon.png</image57x57></icon></application>
