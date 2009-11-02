@@ -11,7 +11,6 @@ package
 	
 	import com.mikechambers.pewpew.ui.FPSView;
 	
-	import com.mikechambers.pewpew.engine.events.TickEvent;
 	import com.mikechambers.pewpew.engine.SoundManager;	
 	
 	
