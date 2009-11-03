@@ -273,7 +273,7 @@ package com.mikechambers.pewpew.engine
 
 		private function onTick(e:TickEvent):void
 		{
-
+			e.stopPropagation();
 			checkCollisions();
 			
 			tickCount++;
