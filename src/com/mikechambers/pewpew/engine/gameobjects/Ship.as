@@ -12,8 +12,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	import flash.events.MouseEvent;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 	import flash.display.DisplayObject;
 	
 	import com.mikechambers.pewpew.engine.pools.MissilePool;
@@ -26,20 +24,17 @@ package com.mikechambers.pewpew.engine.gameobjects
 	public class Ship extends GameObject
 	{
 		private static const SPEED:Number = 3.0 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
-		//private var bounds:Rectangle;
 		
-		//private var target:Target;
+		private const FIRE_INTERVAL:int = int(TickManager.FPS_RATE / 3);
 		
-		private var timer:Timer;
-		private static const FIRE_INTERVAL:Number = 300;
+		private var fireTickCounter:int = 0;
 		
 		private var missileSound:PewSound;
 		
 		private var gameController:GameController;
 		
 		private var missilePool:MissilePool;
-		
-		//Should we have this extend enemy? and rename it?
+
 		public function Ship(bounds:Rectangle, 
 										target:DisplayObject = null, 
 										modifier:Number = 1,
@@ -52,7 +47,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 			{
 				missileSound = PewSound(SoundManager.getInstance().getSound(SoundManager.FIRE_SOUND));
 			}
-			
+			trace(FIRE_INTERVAL);
 			this.gameController = gameController;
 		}
 		
@@ -64,9 +59,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 																	0, true);
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0,
 																		true);
-
-			timer = new Timer(FIRE_INTERVAL);
-			timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
 			
 			missilePool = MissilePool.getInstance();
 		}
@@ -77,13 +69,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			
-			if(timer)
-			{
-				timer.stop();
-				timer.removeEventListener(TimerEvent.TIMER, onTimer);
-				timer = null;
-			}
 		}
 		
 		public function destroy():void
@@ -95,19 +80,18 @@ package com.mikechambers.pewpew.engine.gameobjects
 		protected override function onTick(e:TickEvent):void
 		{			
 			e.stopPropagation();
-			
-			//hack to work around bug where extra event is broadcast even
-			//after listener is removed
-			if(!timer)
-			{
-				return;
-			}
 
 			if(!mouseDown)
 			{
 				return;
 			}
 			
+			fireTickCounter++;
+			if(!(fireTickCounter % FIRE_INTERVAL))
+			{
+				fire();
+			}
+	
 			var radians:Number = gameController.angle;
 			this.rotation = MathUtil.radiansToDegrees(radians);
 			
@@ -133,16 +117,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 		{
 			super.dealloc();
 			
-			if(timer)
-			{
-				timer.stop();
-				timer.removeEventListener(TimerEvent.TIMER, onTimer);
-				timer = null;
-			}
-			
-			//what happens if sound is still playing
-			//missileSound = null;
-			
 			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			
@@ -153,16 +127,12 @@ package com.mikechambers.pewpew.engine.gameobjects
 		private function onMouseDown(e:MouseEvent):void
 		{			
 			mouseDown = true;
-			if(!timer.running)
-			{
-				timer.start();
-			}
 		}
 		
 		private function onMouseUp(e:MouseEvent):void
-		{					
+		{	
+			fireTickCounter = 0;	
 			mouseDown = false;	
-			timer.stop();
 		}		
 		
 		private function fire():void
@@ -189,11 +159,5 @@ package com.mikechambers.pewpew.engine.gameobjects
 			
 			return MathUtil.getAngleBetweenPoints(p1, p2);
 		}			
-		
-		private function onTimer(e:TimerEvent):void
-		{
-			e.stopImmediatePropagation();
-			fire();
-		}
 	}
 }
