@@ -80,10 +80,8 @@ package com.mikechambers.pewpew.engine
 		private var shipBmpData:BitmapData;
 		private var oldShipHash:int = 0;
 		
-		//private var frameCount:int = 0;
 		private var enemyBmpDataLookup:Dictionary = new Dictionary();		
 		
-		//private var timer:Timer;
 		private var tickManager:TickManager;
 		private var tickCount:uint = 0;
 	
@@ -143,10 +141,8 @@ package com.mikechambers.pewpew.engine
 	
 		/************ controll APIS ****************/
 	
-		//should we call this from onStageAdded?
 		public function start():void
 		{
-			
 			if(!tickManager)
 			{
 				tickManager = TickManager.getInstance();
@@ -162,17 +158,15 @@ package com.mikechambers.pewpew.engine
 		{
 			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
 			
-		
 			tickCount = 0;
 			removeAllEnemies();
 			removeAllMissiles();
 
-			
 			lives = DEFAULT_LIVES;
 			score = 0;
 			wave = 1;
 			
-			//remove this to a setter so we can set it in one place
+			//todo: move this to a setter so we can set it in one place
 			scoreBar.score = score;
 			scoreBar.lives = lives;
 			scoreBar.wave = wave;
@@ -207,6 +201,7 @@ package com.mikechambers.pewpew.engine
 
 		private function resetEnemies():void
 		{			
+			//todo: should profile using for in loop
 			for each(var e:Enemy in enemies)
 			{
 				removeChild(e);
@@ -230,7 +225,6 @@ package com.mikechambers.pewpew.engine
 			ship.addEventListener(FireEvent.FIRE, onShipFire, false, 0, true);
 			
 			addChild(ship);
-			//target.ship = ship;
 			
 			ship.x = 200;
 			ship.y = 200;
@@ -279,7 +273,7 @@ package com.mikechambers.pewpew.engine
 
 		private function onTick(e:TickEvent):void
 		{
-
+			e.stopPropagation();
 			checkCollisions();
 			
 			tickCount++;
@@ -344,10 +338,9 @@ package com.mikechambers.pewpew.engine
 			//only check every 2 frames
 			if((tickCount % 2) != 0)
 			{
-				//return;
+				return;
 			}
 			
-			//check this
 			if(!ship)
 			{
 				return;
@@ -464,8 +457,6 @@ package com.mikechambers.pewpew.engine
 					{
 						destroyShip();
 
-						//todo: this may cause issues since we are removing 
-						//it in the loop
 						removeItem(enemy);
 						return;				
 					}
@@ -496,8 +487,6 @@ package com.mikechambers.pewpew.engine
 					}
 				}
 			}
-			
-			//shipBmpData.dispose();
 		}
 				
 		private function waveCompleted():void
@@ -573,7 +562,6 @@ package com.mikechambers.pewpew.engine
 		
 		private function removeItem(s:Sprite):void
 		{
-
 			s.removeEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed);
 			s.removeEventListener(GameObjectEvent.REMOVE, onRemoveItem);
 			
@@ -599,6 +587,8 @@ package com.mikechambers.pewpew.engine
 		
 		private function onExplosionComplete(e:GameEvent):void
 		{
+			e.stopImmediatePropagation();
+			
 			var explosion:Explosion = Explosion(e.target);
 			explosion.removeEventListener(GameEvent.EXPLOSION_COMPLETE, 
 														onExplosionComplete);
@@ -608,6 +598,8 @@ package com.mikechambers.pewpew.engine
 		
 		private function onWaveViewCompleted(e:GameEvent):void
 		{
+			e.stopImmediatePropagation();
+			
 			removeChild(waveCompletedView);
 			waveCompletedView.removeEventListener(GameEvent.WAVE_VIEW_COMPLETE, 
 											onWaveViewCompleted);
@@ -655,17 +647,14 @@ package com.mikechambers.pewpew.engine
 			deathPauseTimer = null;
 			
 			restartEnemies();
-			
-			//addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-			
-			//timer.reset();
-			//timer.start();
+
 			tickCount = 0;
 			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
 		}		
 		
 		private function onEnemyDestroyed(e:GameObjectEvent):void
 		{
+			e.stopImmediatePropagation();
 			var enemy:Enemy = Enemy(e.target);
 			
 			createExplosion(enemy.x + enemy.width, enemy.y + enemy.height);
@@ -678,6 +667,7 @@ package com.mikechambers.pewpew.engine
 
 		private function onShipFire(e:FireEvent):void
 		{
+			e.stopImmediatePropagation();
 			var m:Missile = e.projectile;
 			
 			m.x = ship.x;
@@ -699,6 +689,7 @@ package com.mikechambers.pewpew.engine
 		
 		private function onRemoveMissile(e:GameObjectEvent):void
 		{
+			e.stopImmediatePropagation();
 			removeMissile(Missile(e.target));
 		}
 		
@@ -714,6 +705,7 @@ package com.mikechambers.pewpew.engine
 		
 		private function onRemoveItem(e:GameObjectEvent):void
 		{
+			e.stopImmediatePropagation();
 			removeItem(Sprite(e.target));
 		}	
 	}

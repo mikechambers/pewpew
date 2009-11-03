@@ -94,7 +94,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		protected override function onTick(e:TickEvent):void
 		{			
-
+			e.stopPropagation();
+			
 			//hack to work around bug where extra event is broadcast even
 			//after listener is removed
 			if(!timer)

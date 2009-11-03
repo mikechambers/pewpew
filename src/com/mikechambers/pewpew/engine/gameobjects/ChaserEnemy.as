@@ -109,10 +109,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 		protected override function onStageRemoved(e:Event):void
 		{
 			super.onStageRemoved(e);
-			//removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			//removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
-			//addEventListener(Event.ADDED_TO_STAGE, onStageAdded, false, 0, 
-			//															true);
 		}
 		
 		private function getAngleToTarget():Number
@@ -128,6 +124,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 			
 		protected override function onTick(e:TickEvent):void
 		{	
+			e.stopPropagation();			
+			
 			if(!__target)
 			{
 				if(!resPoint)
