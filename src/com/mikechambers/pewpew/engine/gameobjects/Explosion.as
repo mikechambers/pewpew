@@ -19,6 +19,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		protected override function onTick(e:TickEvent):void
 		{
+			e.stopPropagation();
+			
 			//when running in the debug player, currentFrameLabel is undefined
 			//and will lead to a RTE and memory leak (for this instance)
 			if(currentFrameLabel == COMPLETE_FRAME)

@@ -114,6 +114,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 		private var angle:Number = 0;
 		protected override function onTick(e:TickEvent):void
 		{				
+			e.stopPropagation();
+			
 			var shouldRemove:Boolean = false;
 			if(x + width < 0 || x > bounds.width + width)
 			{

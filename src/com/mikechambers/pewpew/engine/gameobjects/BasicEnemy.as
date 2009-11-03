@@ -101,6 +101,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 
 		protected override function onTick(e:TickEvent):void
 		{			
+			e.stopPropagation();
 			var left:Number = bounds.left;
 			var right:Number = bounds.right;
 			var top:Number = bounds.top;
