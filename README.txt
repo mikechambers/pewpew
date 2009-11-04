@@ -1,6 +1,6 @@
 PewPew
 
 Mike Chambers
-mesh@adobe.com
+mikechambers@gmail.com
 
 This is a very early alpha version.
