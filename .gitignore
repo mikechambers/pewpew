@@ -1,0 +1,25 @@
+#### `.gitignore`
+# xcode noise
+src/build/*
+src/docs/*
+src/docs
+*.mode1v3
+*.perspectivev3
+
+# SVN directories
+.svn
+
+# osx noise
+.DS_Store
+*.pbxuser
+profile
+
+#Flex Builder noise
+.actionScriptProperties
+.flexProperties
+.project
+.settings
+bin/*
+
+html-template
+
