@@ -16,7 +16,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 		private static const POINT_BASE:uint = 100;
 		private static const SPEED:Number = 2.0 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		private var direction:Number; // in radians
-		//private var bounds:Rectangle;	
 		
 		private var vx:Number;
 		private var vy:Number;
@@ -37,10 +36,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 			}
 			
 			direction = (Math.random() * 360) * Math.PI / 180;
-			//draw();
-			
-			//addEventListener(Event.ADDED_TO_STAGE, onStageAdded, false, 0, 
-			//															true);
 		}
 	
 		public override function get pointValue():int
@@ -53,23 +48,27 @@ package com.mikechambers.pewpew.engine.gameobjects
 			init();
 
 			super.onStageAdded(e);
-			//addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-			//addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 
-			//														0, true);
-			//removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
+
 		}	
 	
 		protected override function onStageRemoved(e:Event):void
 		{
 			super.onStageRemoved(e);
-			//removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			//removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
-			//addEventListener(Event.ADDED_TO_STAGE, onStageAdded, false, 0, 
-			//															true);
 		}
 		
+		private var left:Number;
+		private var right:Number;
+		private var top:Number;
+		private var bottom:Number;
+		
 		private function init():void
-		{			
+		{	
+			
+			left = bounds.left;
+			right = bounds.right;
+			top = bounds.top;
+			bottom = bounds.bottom;			
+			
 			var p:Point = generateRandomBoundsPoint();
 			
 			x = p.x;
@@ -102,10 +101,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 		protected override function onTick(e:TickEvent):void
 		{			
 			e.stopPropagation();
-			var left:Number = bounds.left;
-			var right:Number = bounds.right;
-			var top:Number = bounds.top;
-			var bottom:Number = bounds.bottom;
 			
 			if(x + width > right)
 			{
@@ -128,19 +123,9 @@ package com.mikechambers.pewpew.engine.gameobjects
 				vy *= -1;
 			}
 			
-			this.x += vx;
-			this.y += vy;
+			x += vx;
+			y += vy;
 		}	
-			
-		/*
-		public function dealloc():void
-		{
-			//removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			//removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
-			//removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
-
-		}
-		*/
 	}
 
 }
