@@ -14,7 +14,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 	{
 
 		private static const POINT_BASE:uint = 100;
-		private static const SPEED:Number = 2.0 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
+		private static const SPEED:Number = 2.3 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		private var direction:Number; // in radians
 		
 		private var vx:Number;

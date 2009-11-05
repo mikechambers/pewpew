@@ -15,7 +15,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 	{
 
 		private static const POINT_BASE:uint = 200;
-		private static const BASE_SPEED:Number = 3 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
+		private static const BASE_SPEED:Number = 2.5 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		
 		//private var vx:Number;
 		//private var vy:Number;

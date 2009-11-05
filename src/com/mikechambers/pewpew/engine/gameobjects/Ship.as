@@ -23,9 +23,9 @@ package com.mikechambers.pewpew.engine.gameobjects
 
 	public class Ship extends GameObject
 	{
-		private static const SPEED:Number = 3.0 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
+		private static const SPEED:Number = 3.5 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		
-		private const FIRE_INTERVAL:int = int(TickManager.FPS_RATE / 3);
+		private const FIRE_INTERVAL:int = int(TickManager.FPS_RATE / 4);
 		
 		private var fireTickCounter:int = 0;
 		
