@@ -28,16 +28,42 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		private var direction:uint;
 		
-		public function UFOEnemy(bounds:Rectangle, target:DisplayObject = null, modifier:Number = 1)
+		public function UFOEnemy()
 		{
-			super(bounds, target, modifier);
+			super();
+		}	
+		
+		public override function initialize(bounds:Rectangle, 
+										target:DisplayObject = null, 
+										modifier:Number = 1):void
+		{
+			super.initialize(bounds, target, modifier);
 			
 			direction = LEFT;
 			if(Math.random() > .5)
 			{
 				direction = RIGHT;
 			}
+				
+		}
+		
+		public override function start():void
+		{
+			super.start();
+			initPosition();
+			
+			sound = UFONoiseSound(SoundManager.getInstance().getSound(SoundManager.UFO_SOUND));
+			soundChannel = sound.play(0);			
 		}	
+		
+		public override function pause():void
+		{
+			super.pause();
+			
+			soundChannel.stop();
+			sound = null;
+			soundChannel = null;
+		}
 		
 		public override function get pointValue():int
 		{
@@ -49,27 +75,16 @@ package com.mikechambers.pewpew.engine.gameobjects
 			}
 			
 			return int(Math.round(value));
-		}
-		
-		protected override function onStageAdded(e:Event):void
-		{	
-			super.onStageAdded(e);		
-			init();
-
-			sound = UFONoiseSound(SoundManager.getInstance().getSound(SoundManager.UFO_SOUND));
-			soundChannel = sound.play(0);
 		}		
 		
 		protected override function onStageRemoved(e:Event):void
 		{
 			super.onStageRemoved(e);
 			
-			soundChannel.stop();
-			sound = null;
-			soundChannel = null;
+			stop();
 		}
 		
-		private function init():void
+		private function initPosition():void
 		{
 			if(direction == RIGHT)
 			{

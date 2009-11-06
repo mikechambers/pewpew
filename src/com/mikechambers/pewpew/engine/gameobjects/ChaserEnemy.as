@@ -30,12 +30,19 @@ package com.mikechambers.pewpew.engine.gameobjects
 		//Point that enemy goes to if there is no ship to track
 		private var resPoint:Point;
 	
-		public function ChaserEnemy(bounds:Rectangle, 
-										target:DisplayObject = null, 
-										modifier:Number = 1)
+		public function ChaserEnemy()
 		{
-			super(bounds, target, modifier);
+			super();
 
+
+		}
+	
+		public override function initialize(bounds:Rectangle, 
+										target:DisplayObject = null, 
+										modifier:Number = 1):void
+		{
+			super.initialize(bounds, target, modifier);
+			
 			speedModifier = (modifier - 2) * .05;
 			
 			//ship speed is 3.0
@@ -44,11 +51,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 				speedModifier = 1.3;
 			}
 			
-			speed = BASE_SPEED + speedModifier;
-			
-			//addEventListener(Event.ADDED_TO_STAGE, onStageAdded, false, 0, 
-			//															true);
-		}
+			speed = BASE_SPEED + speedModifier;			
+		}	
 	
 		public override function set target(v:DisplayObject):void
 		{
@@ -72,10 +76,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 			init();
 			
 			super.onStageAdded(e);
-
-			//addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-			//addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 0, true);
-			//removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 		}	
 		
 		private function init():void
@@ -168,9 +168,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 		{
 			super.dealloc();
 			target = null;
-			//removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			//removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
-			//removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
 		}			
 	}
 

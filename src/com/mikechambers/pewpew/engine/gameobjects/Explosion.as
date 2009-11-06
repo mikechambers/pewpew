@@ -7,14 +7,29 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	
+	import flash.geom.Rectangle;
+	import flash.display.DisplayObject;
+	
 	public class Explosion extends GameObject
 	{
 		private static const COMPLETE_FRAME:String = "completeFrame";
 		
 		public function Explosion()
 		{
-			super(null, null, null);
+			super();
 
+		}
+		
+		public override function start():void
+		{
+			super.start();
+			gotoAndPlay(1);
+		}
+		
+		public override function pause():void
+		{
+			super.pause();
+			stop();
 		}
 		
 		protected override function onTick(e:TickEvent):void

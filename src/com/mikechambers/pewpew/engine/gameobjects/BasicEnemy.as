@@ -22,11 +22,23 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		private var speedModifier:Number;
 
-		public function BasicEnemy(bounds:Rectangle, 
-										target:DisplayObject = null, 
-										modifier:Number = 1)
+		private var left:Number;
+		private var right:Number;
+		private var top:Number;
+		private var bottom:Number;
+
+		public function BasicEnemy()
 		{
-			super(bounds, target, modifier);
+			super();
+		}
+	
+		public override function initialize(bounds:Rectangle, 
+										target:DisplayObject = null, 
+										modifier:Number = 1):void
+		{
+			super.initialize(bounds, target, modifier);
+			
+			
 			
 			speedModifier = (Math.random() * modifier);
 			
@@ -36,33 +48,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 			}
 			
 			direction = (Math.random() * 360) * Math.PI / 180;
-		}
-	
-		public override function get pointValue():int
-		{
-			return int(Math.round(POINT_BASE * speedModifier));
-		}
-	
-		protected override function onStageAdded(e:Event):void
-		{			
-			init();
-
-			super.onStageAdded(e);
-
-		}	
-	
-		protected override function onStageRemoved(e:Event):void
-		{
-			super.onStageRemoved(e);
-		}
-		
-		private var left:Number;
-		private var right:Number;
-		private var top:Number;
-		private var bottom:Number;
-		
-		private function init():void
-		{	
 			
 			left = bounds.left;
 			right = bounds.right;
@@ -95,9 +80,24 @@ package com.mikechambers.pewpew.engine.gameobjects
 			}
 			
 			vx = SPEED * Math.cos(direction) * speedModifier;
-			vy = SPEED * Math.sin(direction) * speedModifier;
+			vy = SPEED * Math.sin(direction) * speedModifier;				
 		}
-
+	
+		public override function start():void
+		{
+			super.start();
+		}
+		
+		public override function pause():void
+		{
+			super.pause();
+		}
+	
+		public override function get pointValue():int
+		{
+			return int(Math.round(POINT_BASE * speedModifier));
+		}
+	
 		protected override function onTick(e:TickEvent):void
 		{			
 			e.stopPropagation();
