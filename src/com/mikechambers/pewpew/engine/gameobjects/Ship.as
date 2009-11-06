@@ -47,7 +47,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 			{
 				missileSound = PewSound(SoundManager.getInstance().getSound(SoundManager.FIRE_SOUND));
 			}
-			trace(FIRE_INTERVAL);
+
 			this.gameController = gameController;
 		}
 		
@@ -148,6 +148,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 			dispatchEvent(e);
 		}
 		
+		/*
 		var p1:Point = new Point();
 		var p2:Point = new Point();
 		private function getAngleToTarget():Number
@@ -158,6 +159,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 			p2.y = this.y;
 			
 			return MathUtil.getAngleBetweenPoints(p1, p2);
-		}			
+		}
+		*/
 	}
 }
