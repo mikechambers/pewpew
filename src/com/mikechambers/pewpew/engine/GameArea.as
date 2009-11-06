@@ -112,6 +112,7 @@ package com.mikechambers.pewpew.engine
 										stage.stageHeight - scoreBar.height);
 			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 			
+			/*
 			if(!missile)
 			{
 				var missile:Missile = new Missile();
@@ -125,7 +126,7 @@ package com.mikechambers.pewpew.engine
 				//hack to work around AIR bug #2412471
 				removeChild(missile);
 			}
-			
+			*/
 			addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 
 																	0, true);
 						
@@ -345,138 +346,22 @@ package com.mikechambers.pewpew.engine
 			{
 				return;
 			}
-			
-			var shipBounds:Rectangle = ship.getBounds(this);	
-			
-			var shipBoundsHash:int = ship.rotation;
-			
-			//basically, we check the rotation to see if it has changed much
-			//if it hasnt, we just use the bitmapdata from early frame(s)
-			if(!shipBmpData || 
-						shipBoundsHash < oldShipHash - 5 || 
-						shipBoundsHash > oldShipHash + 5)
-			{	
 
-				shipBmpData = new BitmapData(shipBounds.width, 
-												shipBounds.height, true, 0);
-
-				var shipOffset:Matrix = ship.transform.matrix;
-				
-				//workaround for bug #2468806
-				if(shipOffset)
-				{
-					shipOffset.tx = ship.x - shipBounds.x;
-					shipOffset.ty = ship.y - shipBounds.y;			
-
-					shipBmpData.draw(ship, shipOffset);
-				}
-				else
-				{
-					var shipOffset3D:Matrix3D = ship.transform.matrix3D;
-
-					var rawMatrixData:Vector.<Number> = shipOffset3D.rawData;
-
-					var matrix:Matrix = new Matrix();
-					matrix.a = rawMatrixData[0];
-					matrix.c = rawMatrixData[1];
-					matrix.tx = ship.x - shipBounds.x;
-				
-					matrix.b = rawMatrixData[4];
-					matrix.d = rawMatrixData[5];
-					matrix.ty = ship.y - shipBounds.y;
-				
-					ship.transform.matrix3D = null;
-					shipBmpData.draw(ship, matrix);
-					ship.transform.matrix3D = shipOffset3D;
-				}
-				
-			}
-
-			oldShipHash = shipBoundsHash;
 			
 			for each(var enemy:Enemy in enemies)
 			{					
-				//check if bounding boxes collide. if not, continue
-				var classRef:Class = enemy["constructor"] as Class;
-
-				eBmpData = enemyBmpDataLookup[classRef];
-				var enemyBounds:Rectangle = enemy.getBounds(this);
-				if(!eBmpData)
-				{
-					
-					var eBmpData:BitmapData = new BitmapData(enemyBounds.width, 
-														enemyBounds.height, 
-														true, 0);
-				
-					//this might not work for items which rotate
-					var enemyOffset:Matrix = enemy.transform.matrix;
-					
-					//workaround for bug #2468806
-					if(enemyOffset)
-					{
-						enemyOffset.tx = enemy.x - enemyBounds.x;
-						enemyOffset.ty = enemy.y - enemyBounds.y;
-				
-						eBmpData.draw(enemy, enemyOffset);
-	
-					}
-					else
-					{
-						var enemyOffset3D:Matrix3D = enemy.transform.matrix3D;
-						
-						var rawMatrixData:Vector.<Number> = enemyOffset3D.rawData;
-
-						var matrix:Matrix = new Matrix();
-						matrix.a = rawMatrixData[0];
-						matrix.c = rawMatrixData[1];
-						matrix.tx = enemy.x - enemyBounds.x;
-
-						matrix.b = rawMatrixData[4];
-						matrix.d = rawMatrixData[5];
-						matrix.ty = enemy.y - enemyBounds.y;				
-
-						eBmpData.draw(enemy, matrix);						
-					}				
-
-					enemyBmpDataLookup[classRef] = eBmpData;
-				}
-	
-				collisionPoint2.x = enemyBounds.x;
-				collisionPoint2.y = enemyBounds.y;
-
-
 				if(ship.hitTestObject(enemy))
 				{
-					collisionPoint1.x = shipBounds.x;
-					collisionPoint1.y = shipBounds.y;
+					destroyShip();
 
-					//check if bounding boxes collide. if not, continue
-					//we can cahce the matrix
-					if(shipBmpData.hitTest(collisionPoint1, 255, eBmpData, 
-										collisionPoint2, 255))
-					{
-						destroyShip();
-
-						removeItem(enemy);
-						return;				
-					}
+					removeItem(enemy);
+					return;
 				}
 
-			
 				for each(var missile:Missile in missiles)
 				{					
-					if(!enemy.hitTestObject(missile))
+					if(enemy.hitTestObject(missile))
 					{
-						continue;
-					}
-					
-					collisionPoint1.x = missile.x;
-					collisionPoint1.y = missile.y;
-					
-					if(missileBmpData.hitTest(collisionPoint1, 255, eBmpData, 
-										collisionPoint2, 255))
-					{
-						//trace("hit");
 						removeMissile(missile);
 						enemy.hit(missile.damage);
 
