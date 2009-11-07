@@ -348,33 +348,19 @@ package com.mikechambers.pewpew.engine
 
 			proximityManager.refresh(enemies);
 			var neighbors:Vector.<Enemy> = proximityManager.getNeighbors(ship);
-
-			var enemy:Enemy;
-			if(neighbors.length)
-			{
-				for each(enemy in neighbors)
-				{
-					if(ship.hitTestObject(enemy))
-					{
-						destroyShip();
-
-						removeItem(enemy);
-						return;
-					}
-				}
-			}
 			
+			var enemy:Enemy;
 			for each(var missile:Missile in missiles)
 			{
 				neighbors = proximityManager.getNeighbors(missile);
 				
+				if(!neighbors.length)
+				{
+					continue;
+				}				
+				
 				for each(enemy in neighbors)
 				{
-					if(!neighbors.length)
-					{
-						continue;
-					}
-					
 					if(enemy.hitTestObject(missile))
 					{
 						removeMissile(missile);
@@ -387,6 +373,22 @@ package com.mikechambers.pewpew.engine
 					}
 				}
 			}
+			
+			
+			if(neighbors.length)
+			{
+				for each(enemy in neighbors)
+				{
+					if(ship.hitTestObject(enemy))
+					{
+						destroyShip();
+
+						removeItem(enemy);
+						return;
+					}
+				}
+			}			
+			
 		}
 				
 		private function waveCompleted():void
