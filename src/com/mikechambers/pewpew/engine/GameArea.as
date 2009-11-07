@@ -48,6 +48,8 @@ package com.mikechambers.pewpew.engine
 	import flash.utils.Timer;
 
 	import __AS3__.vec.Vector;
+	
+	import com.gskinner.sprites.ProximityManager;
 
 	
 	public class GameArea extends Sprite
@@ -89,6 +91,8 @@ package com.mikechambers.pewpew.engine
 	
 		private var missilePool:MissilePool;		
 	
+		private var proximityManager:ProximityManager;
+	
 		public function GameArea()
 		{			
 			enemies = new Vector.<Enemy>();
@@ -110,23 +114,12 @@ package com.mikechambers.pewpew.engine
 			missilePool = MissilePool.getInstance();
 			bounds = new Rectangle(0,scoreBar.height, stage.stageWidth, 
 										stage.stageHeight - scoreBar.height);
+			
+			proximityManager = new ProximityManager(75);
+			
 			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 			
-			/*
-			if(!missile)
-			{
-				var missile:Missile = new Missile();
 			
-				//hack to work around AIR bug #2412471
-				addChild(missile);
-			
-				missileBmpData = new BitmapData(missile.width, missile.height);
-				missileBmpData.draw(missile);
-				
-				//hack to work around AIR bug #2412471
-				removeChild(missile);
-			}
-			*/
 			addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 
 																	0, true);
 						
@@ -206,6 +199,7 @@ package com.mikechambers.pewpew.engine
 			for each(var e:Enemy in enemies)
 			{
 				removeChild(e);
+				proximityManager.removeItem(e);
 			}
 		}
 		
@@ -216,6 +210,7 @@ package com.mikechambers.pewpew.engine
 			{
 				e.target = ship;
 				addChild(e);
+				proximityManager.addItem(e);
 			}
 		}
 		
@@ -242,6 +237,7 @@ package com.mikechambers.pewpew.engine
 				enemy.addEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed, 
 															false, 0, true);
 				addChild(enemy);
+				proximityManager.addItem(enemy);
 				enemies.push(enemy);
 			}
 			
@@ -265,6 +261,8 @@ package com.mikechambers.pewpew.engine
 															onEnemyDestroyed, 
 															false, 0, true);
 					addChild(enemy);
+					proximityManager.addItem(enemy);
+					
 					enemies.push(enemy);
 				}
 			}
@@ -311,6 +309,7 @@ package com.mikechambers.pewpew.engine
 
 				ufoOnStage = true;
 				addChild(enemy);
+				proximityManager.addItem(enemy);
 				enemies.push(enemy);		
 			}
 			
@@ -347,19 +346,36 @@ package com.mikechambers.pewpew.engine
 				return;
 			}
 
-			
-			for each(var enemy:Enemy in enemies)
-			{					
-				if(ship.hitTestObject(enemy))
+			import flash.display.DisplayObject;
+			proximityManager.refresh();
+			var neighbors:Vector.<DisplayObject> = proximityManager.getNeighbors(ship);
+
+			var enemy:Enemy;
+			if(neighbors.length)
+			{
+				for each(enemy in neighbors)
 				{
-					destroyShip();
+					if(ship.hitTestObject(enemy))
+					{
+						destroyShip();
 
-					removeItem(enemy);
-					return;
+						removeItem(enemy);
+						return;
+					}
 				}
-
-				for each(var missile:Missile in missiles)
-				{					
+			}
+			
+			for each(var missile:Missile in missiles)
+			{
+				neighbors = proximityManager.getNeighbors(missile);
+				
+				for each(enemy in neighbors)
+				{
+					if(!neighbors.length)
+					{
+						continue;
+					}
+					
 					if(enemy.hitTestObject(missile))
 					{
 						removeMissile(missile);
@@ -451,6 +467,7 @@ package com.mikechambers.pewpew.engine
 			s.removeEventListener(GameObjectEvent.REMOVE, onRemoveItem);
 			
 			removeChild(s);
+			proximityManager.removeItem(s);
 							
 			if(s is UFOEnemy)
 			{
