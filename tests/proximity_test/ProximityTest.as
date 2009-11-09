@@ -12,7 +12,7 @@ package
 	public class ProximityTest extends Sprite
 	{
 	
-		private const ITERATIONS:uint = 600returns ;
+		private const ITERATIONS:uint = 1000;
 		private const GRID_SIZE:uint = 35;
 		
 		private var pmg:com.gskinner.sprites.ProximityManager;
@@ -60,6 +60,9 @@ package
 	
         private function runTests():void
         {
+	
+			pmg.refresh(items);
+			pmm.update(items);
             var perfTest:PerformanceTest = PerformanceTest.getInstance();
                 perfTest.out = out;
 
@@ -69,13 +72,13 @@ package
 
 		private function testGrantPD():void
 		{
-			pmg.refresh(items);
+			//pmg.refresh(items);
 			pmg.getNeighbors(checkSprite);
 		}
 		
 		private function testMeshPD():void
 		{
-			pmm.update(items);
+			//pmm.update(items);
 			pmm.getNeighbors(checkSprite);
 		}
 

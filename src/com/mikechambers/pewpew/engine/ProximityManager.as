@@ -12,11 +12,12 @@ package com.mikechambers.pewpew.engine
 	{
 	
 		private var grid:Vector.<Vector.<DisplayObject>>;
-		private var out:Vector.<DisplayObject> = new Vector.<DisplayObject>;
+		private var out:Vector.<DisplayObject>;
 		private var gridLength:uint;
 		private var cols:uint;
 		private var rows:uint;
 		private var gridSize:Number;
+		private var cache:Vector.<Vector.<DisplayObject>>;
 		
 		public function ProximityManager(gridSize:Number, bounds:Rectangle)
 		{
@@ -40,6 +41,9 @@ package com.mikechambers.pewpew.engine
 			{
 				grid[i] = new Vector.<DisplayObject>();
 			}
+			
+			out = new Vector.<DisplayObject>();
+			cache = new Vector.<Vector.<DisplayObject>>(gridLength, true);
 		}
 		
 		private function concatVectors(a:Vector.<DisplayObject>, b:Vector.<DisplayObject>):Vector.<DisplayObject>
@@ -76,6 +80,12 @@ package com.mikechambers.pewpew.engine
 			var row:uint = uint(dobj.y / gridSize);			
 			
 			var gridSlot:uint = cols * row + col;
+			
+			if(cache[gridSlot] != null)
+			{
+				//trace("cache hit");
+				return cache[gridSlot];
+			}
 			
 			//do checks for items / length
 			concatVectors(out, grid[gridSlot]);
@@ -133,12 +143,14 @@ package com.mikechambers.pewpew.engine
 				concatVectors(out, grid[cols * (row + 1) + col - 1]);
 			}
 
+			cache[gridSlot] = out;
 			return out;
 		}
 		
 		public function update(v:Vector.<DisplayObject>):void
 		{
 			resetVectors(grid);
+			clearCache();
 			
 			var col:uint;
 			var row:uint;
@@ -156,7 +168,18 @@ package com.mikechambers.pewpew.engine
 				
 				slot = cols * row + col;
 
-				grid[slot].push(dobj);			
+				grid[slot].push(dobj);		
+			}
+		}
+		
+		//could move this to resetVectors and use same loop
+		private function clearCache():void
+		{
+			var len:int = cache.length;
+			
+			for(var i:int = 0; i < len; i++)
+			{
+				cache[i] = null;
 			}
 		}
 		

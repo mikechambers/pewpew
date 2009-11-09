@@ -48,9 +48,8 @@ package com.mikechambers.pewpew.engine
 	import flash.utils.Timer;
 
 	import __AS3__.vec.Vector;
-	
-	import com.gskinner.sprites.ProximityManager;
 
+	import com.mikechambers.pewpew.engine.ProximityManager;
 	
 	public class GameArea extends Sprite
 	{		
@@ -114,8 +113,9 @@ package com.mikechambers.pewpew.engine
 			missilePool = MissilePool.getInstance();
 			bounds = new Rectangle(0,scoreBar.height, stage.stageWidth, 
 										stage.stageHeight - scoreBar.height);
-			
-			proximityManager = new ProximityManager(75);
+
+
+			proximityManager = new ProximityManager(35, bounds);
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 			
@@ -346,7 +346,7 @@ package com.mikechambers.pewpew.engine
 				return;
 			}
 
-			proximityManager.refresh(enemies);
+			proximityManager.update(enemies);
 			var neighbors:Vector.<Enemy> = proximityManager.getNeighbors(ship);
 			
 			var enemy:Enemy;
