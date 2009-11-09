@@ -4,20 +4,20 @@ package com.mikechambers.pewpew.engine
 	import flash.geom.Rectangle;
 	import __AS3__.vec.Vector;
 	
-	//import com.mikechambers.pewpew.engine.gameobjects.Enemy;
+	import com.mikechambers.pewpew.engine.gameobjects.Enemy;
 	
 	import flash.display.DisplayObject;
 	
 	public class ProximityManager
 	{
 	
-		private var grid:Vector.<Vector.<DisplayObject>>;
-		private var out:Vector.<DisplayObject>;
+		private var grid:Vector.<Vector.<Enemy>>;
+		private var out:Vector.<Enemy>;
 		private var gridLength:uint;
 		private var cols:uint;
 		private var rows:uint;
 		private var gridSize:Number;
-		private var cache:Vector.<Vector.<DisplayObject>>;
+		private var cache:Vector.<Vector.<Enemy>>;
 		
 		public function ProximityManager(gridSize:Number, bounds:Rectangle)
 		{
@@ -34,19 +34,19 @@ package com.mikechambers.pewpew.engine
 			
 			//probably should move this to instance var
 			gridLength = rows * cols;
-			grid = new Vector.<Vector.<DisplayObject>>(gridLength, true);
+			grid = new Vector.<Vector.<Enemy>>(gridLength, true);
 			
 			//can do the lazily
 			for(var i:int = 0; i < gridLength; i++)
 			{
-				grid[i] = new Vector.<DisplayObject>();
+				grid[i] = new Vector.<Enemy>();
 			}
 			
-			out = new Vector.<DisplayObject>();
-			cache = new Vector.<Vector.<DisplayObject>>(gridLength, true);
+			out = new Vector.<Enemy>();
+			cache = new Vector.<Vector.<Enemy>>(gridLength, true);
 		}
 		
-		private function concatVectors(a:Vector.<DisplayObject>, b:Vector.<DisplayObject>):Vector.<DisplayObject>
+		private function concatVectors(a:Vector.<Enemy>, b:Vector.<Enemy>):Vector.<Enemy>
 		{
 			/*
 			var bLimit:int = b.length;
@@ -66,7 +66,7 @@ package com.mikechambers.pewpew.engine
 			return a;
 		}
 		
-		public function getNeighbors(dobj:DisplayObject):Vector.<DisplayObject>
+		public function getNeighbors(dobj:DisplayObject):Vector.<Enemy>
 		{
 			//some optimizations here.
 			//Can cache last result, and just return if it is the same
@@ -147,7 +147,7 @@ package com.mikechambers.pewpew.engine
 			return out;
 		}
 		
-		public function update(v:Vector.<DisplayObject>):void
+		public function update(v:Vector.<Enemy>):void
 		{
 			resetVectors(grid);
 			clearCache();
@@ -183,9 +183,9 @@ package com.mikechambers.pewpew.engine
 			}
 		}
 		
-		private function resetVectors(vectors:Vector.<Vector.<DisplayObject>>):Vector.<Vector.<DisplayObject>>
+		private function resetVectors(vectors:Vector.<Vector.<Enemy>>):Vector.<Vector.<Enemy>>
 		{
-			for each(var vector:Vector.<DisplayObject> in vectors)
+			for each(var vector:Vector.<Enemy> in vectors)
 			{
 				vector.length = 0;
 			}
