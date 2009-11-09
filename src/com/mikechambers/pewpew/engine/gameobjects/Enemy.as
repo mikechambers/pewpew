@@ -15,11 +15,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 
 		public static const DEFAULT_POINT_VAULE:int = 100;
 
-		public function Enemy(bounds:Rectangle, 
-										target:DisplayObject = null, 
-										modifier:Number = 1)
+		public function Enemy()
 		{
-			super(bounds, target, modifier);
 		}
 		
 		public function get pointValue():int

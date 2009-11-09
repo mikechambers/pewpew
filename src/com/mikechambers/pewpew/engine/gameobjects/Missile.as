@@ -8,6 +8,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.geom.Rectangle;
 	
 	import com.mikechambers.pewpew.engine.TickManager;
+	
+	import flash.display.DisplayObject;
 
 	//todo: should we make this extend Enemy?
 	public class Missile extends GameObject
@@ -20,30 +22,12 @@ package com.mikechambers.pewpew.engine.gameobjects
 		//should this extend enemy?
 		public function Missile()
 		{
-			super(null);
-			
-			//addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, 
-			//															true); 
+			super();
 		}
 		
 		public function set angle(value:Number):void
 		{
 			direction = value * Math.PI / 180;
-		}
-
-		public function set boundsRect(value:Rectangle):void
-		{
-			this.bounds = value;
-		}
-		
-		public function resume():void
-		{
-			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
-		}
-		
-		public function pause():void
-		{
-			tickManager.removeEventListener(TickEvent.TICK, onTick);
 		}
 		
 		protected override function onTick(e:TickEvent):void

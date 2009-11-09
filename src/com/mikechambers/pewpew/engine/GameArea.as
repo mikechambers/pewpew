@@ -14,6 +14,7 @@ package com.mikechambers.pewpew.engine
 	import com.mikechambers.pewpew.ui.WaveCompletedView;
 	import com.mikechambers.pewpew.ui.GameController;
 	
+	import com.mikechambers.pewpew.engine.gameobjects.GameObject;	
 	import com.mikechambers.pewpew.engine.gameobjects.Ship;
 	import com.mikechambers.pewpew.engine.gameobjects.Missile;
 	import com.mikechambers.pewpew.engine.gameobjects.Enemy;
@@ -22,7 +23,7 @@ package com.mikechambers.pewpew.engine
 	import com.mikechambers.pewpew.engine.gameobjects.BasicEnemy;
 	import com.mikechambers.pewpew.engine.gameobjects.Explosion;
 	
-	import com.mikechambers.pewpew.engine.pools.MissilePool;	
+	import com.mikechambers.pewpew.engine.pools.GameObjectPool;	
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -88,7 +89,7 @@ package com.mikechambers.pewpew.engine
 	
 		public var gameController:GameController;
 	
-		private var missilePool:MissilePool;		
+		private var gameObjectPool:GameObjectPool;		
 	
 		private var proximityManager:ProximityManager;
 	
@@ -110,7 +111,7 @@ package com.mikechambers.pewpew.engine
 	
 		private function onStageAdded(e:Event):void
 		{
-			missilePool = MissilePool.getInstance();
+			gameObjectPool = GameObjectPool.getInstance();
 			bounds = new Rectangle(0,scoreBar.height, stage.stageWidth, 
 										stage.stageHeight - scoreBar.height);
 
@@ -118,8 +119,7 @@ package com.mikechambers.pewpew.engine
 			proximityManager = new ProximityManager(35, bounds);
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
-			
-			
+
 			addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 
 																	0, true);
 						
@@ -166,7 +166,7 @@ package com.mikechambers.pewpew.engine
 			scoreBar.wave = wave;
 		}	
 		
-		private function removeAllSpritesFromVector(v:Vector.<Sprite>):void
+		private function removeAllSpritesFromVector(v:Vector.<GameObject>):void
 		{
 			var len:int = v.length;
 			
@@ -179,7 +179,7 @@ package com.mikechambers.pewpew.engine
 		private function removeAllEnemies():void
 		{
 			//todo : performace : if this cast is slow, we can inline the loop
-			removeAllSpritesFromVector(Vector.<Sprite>(enemies));
+			removeAllSpritesFromVector(Vector.<GameObject>(enemies));
 			
 		}		
 		
@@ -198,8 +198,7 @@ package com.mikechambers.pewpew.engine
 			//todo: should profile using for in loop
 			for each(var e:Enemy in enemies)
 			{
-				removeChild(e);
-				//proximityManager.removeItem(e);
+				gameObjectPool.returnGameObject(e);
 			}
 		}
 		
@@ -209,18 +208,21 @@ package com.mikechambers.pewpew.engine
 			for each(var e:Enemy in enemies)
 			{
 				e.target = ship;
-				addChild(e);
-				//proximityManager.addItem(e);
+				
+				e.initialize(bounds, ship, wave);
+				addGameObject(e);
 			}
 		}
 		
 		private function initShip():void
 		{
-			ship = new Ship(bounds, null, 1, gameController);
+			ship = Ship(gameObjectPool.getGameObject(Ship));
+			ship.initialize(bounds, null, 1);
+			ship.gameController = gameController;
 			
 			ship.addEventListener(FireEvent.FIRE, onShipFire, false, 0, true);
 			
-			addChild(ship);
+			addGameObject(ship);
 			
 			ship.x = 200;
 			ship.y = 200;
@@ -233,11 +235,13 @@ package com.mikechambers.pewpew.engine
 			
 			for(var i:int = 0; i < DEFAULT_NUMBER_ENEMIES; i++)
 			{
-				enemy = new BasicEnemy(bounds, null, 1 + (wave/5));
+				
+				enemy = BasicEnemy(gameObjectPool.getGameObject(BasicEnemy));
+				enemy.initialize(bounds, null, 1 + (wave/5));
+				
 				enemy.addEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed, 
 															false, 0, true);
-				addChild(enemy);
-				//proximityManager.addItem(enemy);
+				addGameObject(enemy);
 				enemies.push(enemy);
 			}
 			
@@ -256,13 +260,12 @@ package com.mikechambers.pewpew.engine
 				
 				while(len-- != 0)
 				{
-					enemy = new ChaserEnemy(bounds, ship, wave);
+					enemy = ChaserEnemy(gameObjectPool.getGameObject(ChaserEnemy));
+					enemy.initialize(bounds, ship, wave);
 					enemy.addEventListener(GameObjectEvent.DESTROYED, 
 															onEnemyDestroyed, 
 															false, 0, true);
-					addChild(enemy);
-					//proximityManager.addItem(enemy);
-					
+					addGameObject(enemy);
 					enemies.push(enemy);
 				}
 			}
@@ -301,26 +304,36 @@ package com.mikechambers.pewpew.engine
 			
 			if(!ufoOnStage)
 			{
-				var enemy:UFOEnemy = new UFOEnemy(bounds, ship, 1 + (wave/5));
+				var enemy:UFOEnemy = UFOEnemy(gameObjectPool.getGameObject(UFOEnemy));
+				enemy.initialize(bounds, ship, 1 + (wave/5));
 				enemy.addEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed, 
 															false, 0, true);
 				enemy.addEventListener(GameObjectEvent.REMOVE, onRemoveItem, false, 
 																	0, true);
 
 				ufoOnStage = true;
-				addChild(enemy);
-				//proximityManager.addItem(enemy);
+				addGameObject(enemy);
 				enemies.push(enemy);		
 			}
+		}
+		
+		private function addGameObject(go:GameObject):void
+		{
+			if(!contains(go))
+			{
+				addChild(go);
+			}
 			
-			
+			go.start();
 		}
 		
 		/********* game engine APIs **********/
 		
 		private function createExplosion(px:Number, py:Number):void
 		{
-			var exp:Explosion = new Explosion();
+			var exp:Explosion = Explosion(gameObjectPool.getGameObject(Explosion));
+			exp.initialize(bounds);
+			
 			exp.x = px;
 			exp.y = py;
 			
@@ -328,7 +341,7 @@ package com.mikechambers.pewpew.engine
 														onExplosionComplete, 
 														false, 0, true);
 			
-			addChild(exp);	
+			addGameObject(exp);	
 		}
 		
 		private function checkCollisions():void
@@ -420,9 +433,11 @@ package com.mikechambers.pewpew.engine
 			ship.removeEventListener(FireEvent.FIRE, onShipFire);
 			ship.destroy();
 			
-			ship.dealloc();
+			//ship.dealloc();
 			
-			removeChild(ship);
+			//removeChild(ship);
+			gameObjectPool.returnGameObject(ship);
+			
 			ship = null;
 			
 			lives--;
@@ -462,13 +477,12 @@ package com.mikechambers.pewpew.engine
 		}		
 		
 		
-		private function removeItem(s:Sprite):void
+		private function removeItem(s:GameObject):void
 		{
 			s.removeEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed);
 			s.removeEventListener(GameObjectEvent.REMOVE, onRemoveItem);
-			
-			removeChild(s);
-			//proximityManager.removeItem(s);
+
+			gameObjectPool.returnGameObject(s);
 							
 			if(s is UFOEnemy)
 			{
@@ -483,7 +497,7 @@ package com.mikechambers.pewpew.engine
 				waveCompleted();
 			}
 			
-			IMemoryManageable(s).dealloc();
+			//IMemoryManageable(s).dealloc();
 		}		
 		
 		/*********** game engine events ***********/
@@ -495,8 +509,8 @@ package com.mikechambers.pewpew.engine
 			var explosion:Explosion = Explosion(e.target);
 			explosion.removeEventListener(GameEvent.EXPLOSION_COMPLETE, 
 														onExplosionComplete);
-			removeChild(explosion);
-			explosion.dealloc();
+			gameObjectPool.returnGameObject(explosion);
+			//explosion.dealloc();
 		}
 		
 		private function onWaveViewCompleted(e:GameEvent):void
@@ -578,14 +592,7 @@ package com.mikechambers.pewpew.engine
 			
 			m.addEventListener(GameObjectEvent.REMOVE_MISSILE, onRemoveMissile, false, 0, true);
 			
-			if(!contains(m))
-			{
-				addChild(m);
-			}
-			else
-			{
-				m.resume();
-			}
+			addGameObject(m);
 			
 			missiles.push(m);
 		}
@@ -598,7 +605,7 @@ package com.mikechambers.pewpew.engine
 		
 		private function removeMissile(missile:Missile):void
 		{
-			missilePool.returnMissile(missile);
+			gameObjectPool.returnGameObject(missile);
 			
 			missile.removeEventListener(GameObjectEvent.REMOVE_MISSILE, onRemoveMissile);
 			
@@ -609,7 +616,7 @@ package com.mikechambers.pewpew.engine
 		private function onRemoveItem(e:GameObjectEvent):void
 		{
 			e.stopImmediatePropagation();
-			removeItem(Sprite(e.target));
+			removeItem(GameObject(e.target));
 		}	
 	}
 

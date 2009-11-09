@@ -14,7 +14,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.events.MouseEvent;
 	import flash.display.DisplayObject;
 	
-	import com.mikechambers.pewpew.engine.pools.MissilePool;
+	import com.mikechambers.pewpew.engine.pools.GameObjectPool;
 	import com.mikechambers.pewpew.engine.SoundManager;		
 	
 	import flash.geom.Point;
@@ -31,41 +31,38 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		private var missileSound:PewSound;
 		
-		private var gameController:GameController;
+		private var _gameController:GameController;
 		
-		private var missilePool:MissilePool;
+		private var gameObjectPool:GameObjectPool;
 
-		public function Ship(bounds:Rectangle, 
-										target:DisplayObject = null, 
-										modifier:Number = 1,
-										gameController:GameController = null)
-		{
-			
-			super(bounds, target, modifier);
-			
+		public function Ship()
+		{			
 			if(!missileSound)
 			{
 				missileSound = PewSound(SoundManager.getInstance().getSound(SoundManager.FIRE_SOUND));
 			}
-
-			this.gameController = gameController;
-		}
-		
-		protected override function onStageAdded(e:Event):void
-		{
-			super.onStageAdded(e);
 			
+			gameObjectPool = GameObjectPool.getInstance();
+		}
+				
+		public function set gameController(value:GameController):void
+		{
+			this._gameController = value;
+		}
+
+		public override function start():void
+		{
+			super.start();
+
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false, 
 																	0, true);
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0,
 																		true);
-			
-			missilePool = MissilePool.getInstance();
 		}
 		
-		protected override function onStageRemoved(e:Event):void
+		public override function pause():void
 		{
-			super.onStageRemoved(e);
+			super.pause();
 
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
@@ -92,7 +89,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 				fire();
 			}
 	
-			var radians:Number = gameController.angle;
+			var radians:Number = _gameController.angle;
 			this.rotation = MathUtil.radiansToDegrees(radians);
 			
 			var vx:Number = Math.cos(radians) * SPEED;
@@ -125,12 +122,14 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		private var mouseDown:Boolean = false;
 		private function onMouseDown(e:MouseEvent):void
-		{			
+		{	
+			e.stopPropagation();
 			mouseDown = true;
 		}
 		
 		private function onMouseUp(e:MouseEvent):void
 		{	
+			e.stopPropagation();
 			fireTickCounter = 0;	
 			mouseDown = false;	
 		}		
@@ -139,9 +138,9 @@ package com.mikechambers.pewpew.engine.gameobjects
 		{			
 			missileSound.play();
 			
-			var m:Missile = missilePool.getMissile();
+			var m:Missile = Missile(gameObjectPool.getGameObject(Missile));
+			m.initialize(bounds);
 			m.angle = this.rotation;
-			m.boundsRect = bounds;
 			
 			var e:FireEvent = new FireEvent(FireEvent.FIRE);
 			e.projectile = m;
