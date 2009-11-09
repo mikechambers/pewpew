@@ -13,7 +13,7 @@ package com.mikechambers.pewpew.engine
 	public class TickManager extends EventDispatcher implements IMemoryManageable
 	{
 		public static const BASE_FPS_RATE:uint = 24;
-		public static const FPS_RATE:uint = 16;
+		public static const FPS_RATE:uint = 24;
 		
 		private static var timerSprite:Sprite;
 		
