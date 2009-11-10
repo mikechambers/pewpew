@@ -48,6 +48,7 @@ package com.mikechambers.pewpew.ui.views
 					{
 						//_container.removeChild(_currentView);
 						tweenOutComplete(_currentView);
+						break;
 					}
 					default:
 					{
@@ -73,6 +74,7 @@ package com.mikechambers.pewpew.ui.views
 					{
 						view.x = 0;
 						tweenInComplete(view);
+						break;
 					}
 					default:
 					{
