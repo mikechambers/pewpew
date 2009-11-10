@@ -49,6 +49,10 @@ package com.mikechambers.pewpew.ui.views
 						//_container.removeChild(_currentView);
 						tweenOutComplete(_currentView);
 					}
+					default:
+					{
+						trace("ViewManager We should never get here.");
+					}
 				}
 			}
 			
@@ -69,6 +73,10 @@ package com.mikechambers.pewpew.ui.views
 					{
 						view.x = 0;
 						tweenInComplete(view);
+					}
+					default:
+					{
+						trace("ViewManager We should never get here.");
 					}
 				}				
 			}
