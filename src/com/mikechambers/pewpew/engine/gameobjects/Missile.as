@@ -30,8 +30,18 @@ package com.mikechambers.pewpew.engine.gameobjects
 			direction = value * Math.PI / 180;
 		}
 		
+		CONFIG::DEBUG
+		{
+			private function missileOnTick():void{}
+		}
+		
 		protected override function onTick(e:TickEvent):void
 		{
+			CONFIG::DEBUG
+			{
+				missileOnTick();
+			}
+			
 			e.stopPropagation();
 			
 			var shouldRemove:Boolean = false;

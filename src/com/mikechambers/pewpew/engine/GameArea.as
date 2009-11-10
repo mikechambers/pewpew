@@ -273,8 +273,18 @@ package com.mikechambers.pewpew.engine
 		
 		/********** game events *************/
 
+		CONFIG::DEBUG
+		{
+			private function gameAreaonTick():void{}
+		}
+		
 		private function onTick(e:TickEvent):void
 		{
+			CONFIG::DEBUG
+			{
+				gameAreaonTick();
+			}
+			
 			e.stopPropagation();
 			checkCollisions();
 			

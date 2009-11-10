@@ -98,8 +98,18 @@ package com.mikechambers.pewpew.engine.gameobjects
 			return int(Math.round(POINT_BASE * speedModifier));
 		}
 	
+		CONFIG::DEBUG
+		{
+			private function basicEnemyonTick():void{}
+		}
+	
 		protected override function onTick(e:TickEvent):void
 		{			
+			CONFIG::DEBUG
+			{
+				basicEnemyonTick();
+			}
+			
 			e.stopPropagation();
 			
 			if(x + width > right)

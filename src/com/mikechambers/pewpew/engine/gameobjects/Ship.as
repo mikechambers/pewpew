@@ -74,8 +74,18 @@ package com.mikechambers.pewpew.engine.gameobjects
 			s.play();
 		}
 		
+		CONFIG::DEBUG
+		{
+			private function shipOnTick():void{}
+		}
+		
 		protected override function onTick(e:TickEvent):void
 		{			
+			CONFIG::DEBUG
+			{
+				shipOnTick();
+			}
+			
 			e.stopPropagation();
 
 			if(!mouseDown)
