@@ -105,11 +105,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 				y = bounds.height;
 			}
 		}
-	
-		protected override function onStageRemoved(e:Event):void
-		{
-			super.onStageRemoved(e);
-		}
 		
 		private function getAngleToTarget():Number
 		{
