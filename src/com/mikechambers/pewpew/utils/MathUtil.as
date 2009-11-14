@@ -33,6 +33,12 @@ package com.mikechambers.pewpew.utils
 			
 			return dist;
 		}
+		
+		public static function abs(value:Number):Number
+		{
+			//http://lab.polygonal.de/2007/05/10/bitwise-gems-fast-integer-math/
+			return (value ^ (value >> 31)) - (value >> 31);
+		}
 	}
 }
 
