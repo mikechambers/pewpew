@@ -358,8 +358,8 @@ package com.mikechambers.pewpew.engine
 		{
 			
 			//frameCount++;
-			//only check every 2 frames
-			if((tickCount % 2) != 0)
+			//dont check every 1/3 frame
+			if((tickCount % 3) == 0)
 			{
 				return;
 			}
