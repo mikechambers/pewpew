@@ -384,6 +384,7 @@ package com.mikechambers.pewpew.engine
 			//we should test this
 			
 			var enemy:Enemy;
+			var bounds:Rectangle;
 			for each(var missile:Missile in missiles)
 			{
 				neighbors = proximityManager.getNeighbors(missile);
@@ -393,9 +394,10 @@ package com.mikechambers.pewpew.engine
 					continue;
 				}				
 				
+				bounds = missile.getBounds(this);
 				for each(enemy in neighbors)
 				{
-					if(DisplayObjectUtil.hitTestCircle(enemy,missile))
+					if(DisplayObjectUtil.hitTestCircle(enemy.getBounds(this),bounds))
 					{
 						removeMissile(missile);
 						enemy.hit(missile.damage);
@@ -408,12 +410,12 @@ package com.mikechambers.pewpew.engine
 				}
 			}
 			
-			
+			var shipBounds:Rectangle = ship.getBounds(this);
 			if(neighbors.length)
 			{
 				for each(enemy in neighbors)
 				{
-					if(DisplayObjectUtil.hitTestCircle(ship,enemy))
+					if(DisplayObjectUtil.hitTestCircle(shipBounds,enemy.getBounds(this)))
 					{
 						destroyShip();
 

@@ -5,6 +5,7 @@ package com.mikechambers.pewpew.engine
 	import __AS3__.vec.Vector;
 	
 	import com.mikechambers.pewpew.engine.gameobjects.Enemy;
+	import com.mikechambers.pewpew.utils.MathUtil;
 	
 	import flash.display.DisplayObject;
 	
@@ -76,8 +77,8 @@ package com.mikechambers.pewpew.engine
 			//var col:uint = Math.floor(Math.abs(dobj.x + (dobj.width * .5)) / gridSize);
 			//var row:uint = Math.floor(Math.abs(dobj.y + (dobj.height * .5)) / gridSize);
 			
-			var col:uint = uint(dobj.x / gridSize);
-			var row:uint = uint(dobj.y / gridSize);			
+			var col:uint = uint(MathUtil.abs(dobj.x / gridSize));
+			var row:uint = uint(MathUtil.abs(dobj.y / gridSize));			
 			
 			var gridSlot:uint = cols * row + col;
 			
@@ -162,8 +163,8 @@ package com.mikechambers.pewpew.engine
 				//col = Math.floor(Math.abs(dobj.x + (dobj.width * .5)) / gridSize);
 				//row = Math.floor(Math.abs(dobj.y + (dobj.height * .5)) / gridSize);
 				
-				col = uint(dobj.x / gridSize);
-				row = uint(dobj.y / gridSize);
+				col = uint(MathUtil.abs(dobj.x / gridSize));
+				row = uint(MathUtil.abs(dobj.y / gridSize));
 
 				
 				slot = cols * row + col;

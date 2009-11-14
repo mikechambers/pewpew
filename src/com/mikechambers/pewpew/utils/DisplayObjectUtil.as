@@ -9,15 +9,16 @@
 package com.mikechambers.pewpew.utils
 {
 	import flash.display.Sprite;
+	import flash.geom.Rectangle;
 
 	public final class DisplayObjectUtil
 	{
-		public static function hitTestCircle(clip1:Sprite, clip2:Sprite):Boolean
+		public static function hitTestCircle(bounds1:Rectangle, bounds2:Rectangle):Boolean
 		{
-			var dx:Number = clip2.x - clip1.x;
-			var dy:Number = clip2.y  - clip1.y ;
+			var dx:Number = bounds2.x  - bounds1.x;
+			var dy:Number = bounds2.y  - bounds1.y ;
 
-			var radii:Number = ((clip1.width * .5) + (clip2.width * .5));
+			var radii:Number = ((bounds1.width * .5) + (bounds2.width * .5));
 			return ((dx * dx) + (dy * dy) < radii * radii);
 		}
 	}
