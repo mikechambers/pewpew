@@ -583,8 +583,9 @@ package com.mikechambers.pewpew.engine
 		{
 			e.stopImmediatePropagation();
 			var enemy:Enemy = Enemy(e.target);
+			var b:Rectangle = enemy.getBounds(this);
 			
-			createExplosion(enemy.x + enemy.width, enemy.y + enemy.height);
+			createExplosion(b.x + (b.width * .5), b.y + (b.height * .5));
 			
 			score += enemy.pointValue;
 			scoreBar.score = score;			
