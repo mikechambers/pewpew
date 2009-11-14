@@ -327,11 +327,16 @@ package com.mikechambers.pewpew.engine
 			}
 		}
 		
-		private function addGameObject(go:GameObject):void
+		private function addGameObject(go:GameObject, setToBottom:Boolean = false):void
 		{
 			if(!contains(go))
 			{
 				addChild(go);
+				
+				if(setToBottom)
+				{
+					setChildIndex(go, 0);
+				}
 			}
 			
 			go.start();
@@ -601,7 +606,7 @@ package com.mikechambers.pewpew.engine
 			
 			m.addEventListener(GameObjectEvent.REMOVE_MISSILE, onRemoveMissile, false, 0, true);
 			
-			addGameObject(m);
+			addGameObject(m, true);
 			
 			missiles.push(m);
 		}
