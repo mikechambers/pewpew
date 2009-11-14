@@ -14,8 +14,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.events.MouseEvent;
 	import flash.display.DisplayObject;
 	
-	import com.mikechambers.pewpew.engine.pools.GameObjectPool;
-	import com.mikechambers.pewpew.engine.SoundManager;		
+	import com.mikechambers.pewpew.engine.pools.GameObjectPool;	
 	
 	import flash.geom.Point;
 	
@@ -29,19 +28,12 @@ package com.mikechambers.pewpew.engine.gameobjects
 		
 		private var fireTickCounter:int = 0;
 		
-		private var missileSound:PewSound;
-		
 		private var _gameController:GameController;
 		
 		private var gameObjectPool:GameObjectPool;
 
 		public function Ship()
-		{			
-			if(!missileSound)
-			{
-				missileSound = PewSound(SoundManager.getInstance().getSound(SoundManager.FIRE_SOUND));
-			}
-			
+		{						
 			gameObjectPool = GameObjectPool.getInstance();
 		}
 				
@@ -72,12 +64,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 
 			//stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			//stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-		}
-		
-		public function destroy():void
-		{
-			var s:ExplosionSound = ExplosionSound(SoundManager.getInstance().getSound(SoundManager.EXPLOSION_SOUND));
-			s.play();
 		}
 		
 		CONFIG::DEBUG
@@ -151,9 +137,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 		}		
 		
 		private function fire():void
-		{			
-			missileSound.play();
-			
+		{						
 			var m:Missile = Missile(gameObjectPool.getGameObject(Missile));
 			m.initialize(bounds);
 			m.angle = this.rotation;

@@ -2,8 +2,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 {
 	import com.mikechambers.pewpew.memory.IMemoryManageable;	
 	
-	import com.mikechambers.pewpew.engine.events.GameObjectEvent;
-	import com.mikechambers.pewpew.engine.SoundManager;		
+	import com.mikechambers.pewpew.engine.events.GameObjectEvent;	
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -35,10 +34,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 		}
 		
 		protected function destroy():void
-		{
-			var s:ExplosionSound = ExplosionSound(SoundManager.getInstance().getSound(SoundManager.EXPLOSION_SOUND));
-			s.play();		
-			
+		{			
 			var e:GameObjectEvent = new GameObjectEvent(GameObjectEvent.DESTROYED);
 			dispatchEvent(e);
 		}

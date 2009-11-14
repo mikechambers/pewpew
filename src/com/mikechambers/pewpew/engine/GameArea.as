@@ -441,11 +441,7 @@ package com.mikechambers.pewpew.engine
 			createExplosion(ship.x, ship.y);
 			
 			ship.removeEventListener(FireEvent.FIRE, onShipFire);
-			ship.destroy();
 			
-			//ship.dealloc();
-			
-			//removeChild(ship);
 			gameObjectPool.returnGameObject(ship);
 			
 			ship = null;

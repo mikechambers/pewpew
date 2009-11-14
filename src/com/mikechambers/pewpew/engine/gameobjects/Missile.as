@@ -10,6 +10,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import com.mikechambers.pewpew.engine.TickManager;
 	
 	import flash.display.DisplayObject;
+	import com.mikechambers.pewpew.engine.SoundManager;	
 
 	//todo: should we make this extend Enemy?
 	public class Missile extends GameObject
@@ -18,6 +19,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 		private var direction:Number;
 		
 		public var damage:Number = 100;
+		private var missileSound:PewSound;
 		
 		//should this extend enemy?
 		public function Missile()
@@ -28,6 +30,19 @@ package com.mikechambers.pewpew.engine.gameobjects
 		public function set angle(value:Number):void
 		{
 			direction = value * Math.PI / 180;
+		}
+		
+		public override function initialize(bounds:Rectangle, 
+										target:DisplayObject = null, 
+										modifier:Number = 1):void
+		{
+			super.initialize(bounds, target, modifier);
+			if(!missileSound)
+			{
+				missileSound = PewSound(SoundManager.getInstance().getSound(SoundManager.FIRE_SOUND));
+			}			
+			
+			missileSound.play();
 		}
 		
 		CONFIG::DEBUG

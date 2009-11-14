@@ -10,6 +10,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.geom.Rectangle;
 	import flash.display.DisplayObject;
 	
+	import com.mikechambers.pewpew.engine.SoundManager;	
+	
 	public class Explosion extends GameObject
 	{
 		private static const COMPLETE_FRAME:String = "completeFrame";
@@ -24,6 +26,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 		{
 			super.start();
 			gotoAndPlay(1);
+			var s:ExplosionSound = ExplosionSound(SoundManager.getInstance().getSound(SoundManager.EXPLOSION_SOUND));
+			s.play();
 		}
 		
 		public override function pause():void
