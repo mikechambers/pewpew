@@ -23,6 +23,8 @@ package com.mikechambers.pewpew.engine
 	import com.mikechambers.pewpew.engine.gameobjects.BasicEnemy;
 	import com.mikechambers.pewpew.engine.gameobjects.Explosion;
 	
+	import com.mikechambers.pewpew.utils.DisplayObjectUtil;
+	
 	import com.mikechambers.pewpew.engine.pools.GameObjectPool;	
 	
 	import flash.display.Bitmap;
@@ -377,6 +379,10 @@ package com.mikechambers.pewpew.engine
 			proximityManager.update(enemies);
 			var neighbors:Vector.<Enemy> = proximityManager.getNeighbors(ship);
 			
+			//DisplayObjectUtil.hitTestCircle
+			//we might be able to speed this up storing in a local function
+			//we should test this
+			
 			var enemy:Enemy;
 			for each(var missile:Missile in missiles)
 			{
@@ -389,7 +395,7 @@ package com.mikechambers.pewpew.engine
 				
 				for each(enemy in neighbors)
 				{
-					if(enemy.hitTestObject(missile))
+					if(DisplayObjectUtil.hitTestCircle(enemy,missile))
 					{
 						removeMissile(missile);
 						enemy.hit(missile.damage);
@@ -407,7 +413,7 @@ package com.mikechambers.pewpew.engine
 			{
 				for each(enemy in neighbors)
 				{
-					if(ship.hitTestObject(enemy))
+					if(DisplayObjectUtil.hitTestCircle(ship,enemy))
 					{
 						destroyShip();
 
