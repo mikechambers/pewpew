@@ -66,8 +66,8 @@ package com.mikechambers.pewpew.engine.pools
 			var pool:Array = getPool(classType);
 			pool.push(go);
 			go.pause();
-			go.x = -20;
-			go.y = -20;
+			go.x = -50;
+			go.y = -50;
 			
 			//trace("return", classType, pool.length);
 		}
