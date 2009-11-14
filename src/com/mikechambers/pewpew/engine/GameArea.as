@@ -438,7 +438,9 @@ package com.mikechambers.pewpew.engine
 		private var deathPauseTimer:Timer;
 		private function destroyShip():void
 		{			
-			createExplosion(ship.x, ship.y);
+			var b:Rectangle = ship.getBounds(this);
+			createExplosion(b.x + (b.width *.5), 
+								b.y + (b.height * .5));
 			
 			ship.removeEventListener(FireEvent.FIRE, onShipFire);
 			
