@@ -50,6 +50,12 @@ package com.mikechambers.pewpew.engine.gameobjects
 			this._gameController = value;
 		}
 
+		protected override function onStageRemoved(e:Event):void
+		{
+			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);															
+		}
+
 		public override function start():void
 		{
 			super.start();
@@ -64,8 +70,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 		{
 			super.pause();
 
-			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			//stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			//stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		}
 		
 		public function destroy():void
