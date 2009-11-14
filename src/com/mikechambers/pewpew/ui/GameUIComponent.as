@@ -10,7 +10,9 @@ package com.mikechambers.pewpew.ui
 			super();
 			
 			mouseEnabled = false;
-			mouseChildren = false;			
+			mouseChildren = false;
+			
+			cacheAsSurface = true;	
 		}
 	
 	}
