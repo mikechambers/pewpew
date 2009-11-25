@@ -134,7 +134,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 				p2.x = this.x;
 				p2.y = this.y;
 				
-				var dist:Number = MathUtil.disanceBetweenPoints(p1, p2);
+				var dist:Number = MathUtil.distanceBetweenPoints(p1, p2);
 			
 				//check if we are on target, if we are, then stop
 				//otherwise we flip back and forth
