@@ -51,8 +51,6 @@ package com.mikechambers.pewpew.engine
 	import flash.utils.Timer;
 
 	import __AS3__.vec.Vector;
-
-	import com.mikechambers.pewpew.engine.ProximityManager;
 	
 	public class GameArea extends Sprite
 	{		
@@ -293,7 +291,6 @@ package com.mikechambers.pewpew.engine
 			tickCount++;
 			if(!(tickCount % TickManager.FPS_RATE))
 			{
-				
 				if(!(tickCount % GAME_CHECK_INTERVAL * TickManager.FPS_RATE))
 				{
 					gameCheck();
@@ -375,9 +372,6 @@ package com.mikechambers.pewpew.engine
 			{
 				return;
 			}
-
-			proximityManager.update(enemies);
-			var neighbors:Vector.<Enemy> = proximityManager.getNeighbors(ship);
 			
 			//DisplayObjectUtil.hitTestCircle
 			//we might be able to speed this up storing in a local function
@@ -386,16 +380,11 @@ package com.mikechambers.pewpew.engine
 			var enemy:Enemy;
 			var bounds:Rectangle;
 			for each(var missile:Missile in missiles)
-			{
-				neighbors = proximityManager.getNeighbors(missile);
-				
-				if(!neighbors.length)
-				{
-					continue;
-				}				
+			{			
 				
 				bounds = missile.getBounds(this);
-				for each(enemy in neighbors)
+				var shipBounds:Rectangle = ship.getBounds(this);
+				for each(enemy in enemies)
 				{
 					if(DisplayObjectUtil.hitTestCircle(enemy.getBounds(this),bounds))
 					{
@@ -407,14 +396,7 @@ package com.mikechambers.pewpew.engine
 							return;
 						}
 					}
-				}
-			}
-			
-			var shipBounds:Rectangle = ship.getBounds(this);
-			if(neighbors.length)
-			{
-				for each(enemy in neighbors)
-				{
+					
 					if(DisplayObjectUtil.hitTestCircle(shipBounds,enemy.getBounds(this)))
 					{
 						destroyShip();
@@ -423,8 +405,16 @@ package com.mikechambers.pewpew.engine
 						return;
 					}
 				}
-			}			
+			}
 			
+			/*
+			var shipBounds:Rectangle = ship.getBounds(this);
+
+			for each(enemy in enemies)
+			{
+
+			}		
+			*/
 		}
 				
 		private function waveCompleted():void
