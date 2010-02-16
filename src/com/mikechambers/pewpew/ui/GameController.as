@@ -25,7 +25,8 @@ package com.mikechambers.pewpew.ui
 			
 			mouseEnabled = false;
 			mouseChildren = false;
-			cacheAsSurface = true;
+			//cacheAsSurface = true;
+			cacheAsBitmap = true;
 		}
 	
 		private function onStageAdded(e:Event):void

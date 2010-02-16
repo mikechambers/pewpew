@@ -15,7 +15,7 @@ package com.mikechambers.pewpew.ui
 		
 		public function ScoreBar()
 		{
-			cacheAsSurface = true;
+			cacheAsBitmap = true;
 		}	
 		
 		/******* getters and setters ***********/
