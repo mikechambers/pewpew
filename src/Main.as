@@ -1,22 +1,19 @@
 package
 {
-	import com.mikechambers.pewpew.ui.events.ScreenControlEvent;
-	import com.mikechambers.pewpew.ui.ProfileManager;
+	import com.mikechambers.pewpew.engine.GameArea;
+	import com.mikechambers.pewpew.engine.SoundManager;
+	import com.mikechambers.pewpew.ui.FPSView;
 	import com.mikechambers.pewpew.ui.GameMenu;
 	import com.mikechambers.pewpew.ui.GameOverScreen;
-	import com.mikechambers.pewpew.engine.GameArea;
+	import com.mikechambers.pewpew.ui.ProfileManager;
+	import com.mikechambers.pewpew.ui.events.ScreenControlEvent;
 	import com.mikechambers.pewpew.ui.views.ViewManager;
 	
-	import flash.display.StageQuality;
-	
-	import com.mikechambers.pewpew.ui.FPSView;
-	
-	import com.mikechambers.pewpew.engine.SoundManager;	
-	
-	
-	import flash.display.Sprite;
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.display.StageAlign;
+	import flash.display.StageDisplayState;
+	import flash.display.StageQuality;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -56,10 +53,10 @@ package
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded, false, 0, 
 																		true);			
-				
-			background.cacheAsSurface = true;
-			//background.mouseEnabled = false;
-			//background.mouseChildren = false;	
+			
+			background.cacheAsBitmap = true;
+			background.mouseEnabled = false;
+			background.mouseChildren = false;	
 																		
 			stop();
 		}

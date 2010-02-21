@@ -1,16 +1,15 @@
 package com.mikechambers.pewpew.ui
 {
 	
-	import flash.events.Event;
-	
 	import com.mikechambers.pewpew.engine.TickManager;
 	import com.mikechambers.pewpew.engine.events.TickEvent;
-	
 	import com.mikechambers.pewpew.utils.MathUtil;
 	
-	import flash.geom.Point;
-	
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.geom.Matrix;
+	import flash.geom.Point;
+
 	public class GameController extends Sprite
 	{
 		private var tickManager:TickManager;
@@ -26,6 +25,7 @@ package com.mikechambers.pewpew.ui
 			mouseEnabled = false;
 			mouseChildren = false;
 			//cacheAsSurface = true;
+			cacheAsBitmapMatrix = new Matrix();
 			cacheAsBitmap = true;
 		}
 	

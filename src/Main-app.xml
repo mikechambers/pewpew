@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <application xmlns="http://ns.adobe.com/air/application/2.0">
     <supportedProfiles>desktop mobileDevice</supportedProfiles>
+   
+<!-- 
+	<iPhone>
+        <InfoAdditions><![CDATA[
+			<key>CTTextureUploadTracking</key>
+			<true/>
+		]]></InfoAdditions>
+    </iPhone>
+-->
     <id>com.mikechambers.pewpew</id>
     <filename>PewPew</filename>
     <name>PewPew</name>
@@ -28,19 +37,12 @@
         <maximizable>true</maximizable>
         <minimizable>true</minimizable>
         <transparent>false</transparent>
-    <renderMode>gpu</renderMode></initialWindow>
+        <renderMode>gpu</renderMode>
+    </initialWindow>
     <customUpdateUI>false</customUpdateUI>
     <copyright></copyright>
     <description></description>
-    <!--
-	<icon>
-		<image16x16>AppIconsForAIRPublish/AIRApp_16.png</image16x16>
-		<image32x32>AppIconsForAIRPublish/AIRApp_32.png</image32x32>
-		<image48x48>AppIconsForAIRPublish/AIRApp_48.png</image48x48>
-		<image128x128>AppIconsForAIRPublish/AIRApp_128.png</image128x128>
-	</icon>
-	-->
     <icon>
-        <image57x57>AppIconsForAIRPublish/Icon.png</image57x57>
+        <image57x57>AppIconsForPublish/Icon.png</image57x57>
     </icon>
 </application>
