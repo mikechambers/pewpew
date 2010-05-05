@@ -118,6 +118,10 @@ package com.mikechambers.pewpew.engine
 
 			proximityManager = new ProximityManager(35, bounds);
 			
+			
+			gameController.x = bounds.width - (gameController.width / 2);
+			gameController.y = bounds.height - (gameController.height / 2);
+			
 			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 
 			addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 

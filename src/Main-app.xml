@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <application xmlns="http://ns.adobe.com/air/application/2.5">
     <supportedProfiles>desktop mobileDevice</supportedProfiles>
-<!--   
+    <!--   
  <iPhone>
         <InfoAdditions><![CDATA[
 			<key>CTTextureUploadTracking</key>
@@ -27,8 +27,8 @@
         <!-- <minimizable></minimizable> -->
         <!-- <maximizable></maximizable> -->
         <resizable>false</resizable>
-        <width>320</width>
-        <height>480</height>
+        <width>480</width>
+        <height>800</height>
         <!-- <x></x> -->
         <!-- <y></y> -->
         <!-- <minSize></minSize> -->
