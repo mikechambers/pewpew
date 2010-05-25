@@ -405,17 +405,18 @@ package com.mikechambers.pewpew.engine
 			//DisplayObjectUtil.hitTestCircle
 			//we might be able to speed this up storing in a local function
 			//we should test this
+						
+			var shipBounds:Rectangle = ship.getBounds(this);
 			
-			var enemy:Enemy;
-			var bounds:Rectangle;
-			for each(var missile:Missile in missiles)
+			
+			
+			//for each(var missile:Missile in missiles)
+			for each(var enemy:Enemy in enemies)
 			{			
-				
-				bounds = missile.getBounds(this);
-				var shipBounds:Rectangle = ship.getBounds(this);
-				for each(enemy in enemies)
+				var enemyBounds:Rectangle = enemy.getBounds(this);
+				for each(var missile:Missile in missiles)
 				{
-					if(DisplayObjectUtil.hitTestCircle(enemy.getBounds(this),bounds))
+					if(DisplayObjectUtil.hitTestCircle(enemyBounds,missile.getBounds(this)))
 					{
 						removeMissile(missile);
 						enemy.hit(missile.damage);
@@ -425,25 +426,16 @@ package com.mikechambers.pewpew.engine
 							return;
 						}
 					}
-					
-					if(DisplayObjectUtil.hitTestCircle(shipBounds,enemy.getBounds(this)))
-					{
-						destroyShip();
+				}
+				
+				if(DisplayObjectUtil.hitTestCircle(shipBounds,enemyBounds))
+				{
+					destroyShip();
 
-						removeItem(enemy);
-						return;
-					}
+					removeItem(enemy);
+					return;
 				}
 			}
-			
-			/*
-			var shipBounds:Rectangle = ship.getBounds(this);
-
-			for each(enemy in enemies)
-			{
-
-			}		
-			*/
 		}
 				
 		private function waveCompleted():void
