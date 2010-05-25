@@ -47,7 +47,7 @@ package com.mikechambers.pewpew.engine
 	import com.mikechambers.pewpew.engine.gameobjects.BasicEnemy;
 	import com.mikechambers.pewpew.engine.gameobjects.Explosion;
 	
-	import com.mikechambers.pewpew.utils.DisplayObjectUtil;
+	import com.mikechambers.sgf.utils.DisplayObjectUtil;
 	
 	import com.mikechambers.pewpew.engine.pools.GameObjectPool;	
 	
@@ -389,9 +389,10 @@ package com.mikechambers.pewpew.engine
 		private function checkCollisions():void
 		{
 			
+			
 			//frameCount++;
-			//dont check every 1/3 frame
-			if((tickCount % 3) == 0)
+			//check 1 out of every 3 frames
+			if((tickCount % 3) != 0)
 			{
 				return;
 			}
