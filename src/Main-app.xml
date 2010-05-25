@@ -36,7 +36,7 @@
         <maximizable>true</maximizable>
         <minimizable>true</minimizable>
         <transparent>false</transparent>
-        <renderMode>gpu</renderMode>
+        <renderMode>cpu</renderMode>
     </initialWindow>
     <customUpdateUI>false</customUpdateUI>
     <copyright></copyright>

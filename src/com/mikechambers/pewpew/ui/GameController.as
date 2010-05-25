@@ -24,8 +24,7 @@ package com.mikechambers.pewpew.ui
 			
 			mouseEnabled = false;
 			mouseChildren = false;
-			//cacheAsSurface = true;
-			cacheAsBitmapMatrix = new Matrix();
+			//cacheAsBitmapMatrix = new Matrix();
 			cacheAsBitmap = true;
 		}
 	
