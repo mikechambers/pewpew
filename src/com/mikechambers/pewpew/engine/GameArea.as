@@ -31,8 +31,8 @@ package com.mikechambers.pewpew.engine
 	import com.mikechambers.pewpew.ui.events.ScreenControlEvent;
 	import com.mikechambers.pewpew.engine.events.GameObjectEvent;
 	
-	import com.mikechambers.pewpew.engine.TickManager;
-	import com.mikechambers.pewpew.engine.events.TickEvent;
+	import com.mikechambers.sgf.time.TickManager;
+	import com.mikechambers.sgf.events.TickEvent;
 	
 	import com.mikechambers.pewpew.ui.ScoreBar;
 	import com.mikechambers.pewpew.ui.WaveCompletedView;

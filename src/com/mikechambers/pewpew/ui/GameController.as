@@ -25,8 +25,8 @@
 package com.mikechambers.pewpew.ui
 {
 	
-	import com.mikechambers.pewpew.engine.TickManager;
-	import com.mikechambers.pewpew.engine.events.TickEvent;
+	import com.mikechambers.sgf.time.TickManager;
+	import com.mikechambers.sgf.events.TickEvent;
 	import com.mikechambers.pewpew.utils.MathUtil;
 	
 	import flash.display.Sprite;

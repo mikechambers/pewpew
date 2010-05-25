@@ -26,8 +26,9 @@ package com.mikechambers.pewpew.engine.gameobjects
 {
 	import com.mikechambers.pewpew.engine.events.FireEvent;
 	import com.mikechambers.pewpew.utils.MathUtil;
-	
-	import com.mikechambers.pewpew.engine.events.TickEvent;		
+
+	import com.mikechambers.sgf.events.TickEvent;
+	import com.mikechambers.sgf.time.TickManager;	
 	import com.mikechambers.pewpew.ui.GameController;
 	
 	import flash.display.Sprite;
@@ -41,8 +42,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import com.mikechambers.pewpew.engine.pools.GameObjectPool;	
 	
 	import flash.geom.Point;
-	
-	import com.mikechambers.pewpew.engine.TickManager;
 
 	public class Ship extends GameObject
 	{

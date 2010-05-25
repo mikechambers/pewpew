@@ -25,7 +25,6 @@
 package com.mikechambers.pewpew.engine.gameobjects
 {	
 	import com.mikechambers.pewpew.engine.events.GameObjectEvent;
-	import com.mikechambers.pewpew.engine.events.TickEvent;
 	import com.mikechambers.pewpew.engine.SoundManager;		
 	
 	import flash.display.Sprite;
@@ -34,7 +33,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.media.SoundChannel;
 	import flash.display.DisplayObject;
 
-	import com.mikechambers.pewpew.engine.TickManager;
+	import com.mikechambers.sgf.events.TickEvent;
+	import com.mikechambers.sgf.time.TickManager;
 
 	public class UFOEnemy extends Enemy
 	{

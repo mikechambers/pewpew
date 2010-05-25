@@ -25,13 +25,13 @@
 package com.mikechambers.pewpew.engine.gameobjects
 {
 	import com.mikechambers.pewpew.engine.events.GameObjectEvent;
-	import com.mikechambers.pewpew.engine.events.TickEvent;		
+	
+	import com.mikechambers.sgf.time.TickManager;
+	import com.mikechambers.sgf.events.TickEvent;		
 		
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
-	
-	import com.mikechambers.pewpew.engine.TickManager;
 	
 	import flash.display.DisplayObject;
 	import com.mikechambers.pewpew.engine.SoundManager;	

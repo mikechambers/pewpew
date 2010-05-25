@@ -25,7 +25,6 @@
 package com.mikechambers.pewpew.engine.gameobjects
 {	
 	import com.mikechambers.pewpew.utils.MathUtil;
-	import com.mikechambers.pewpew.engine.events.TickEvent;
 
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -33,7 +32,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
 	
-	import com.mikechambers.pewpew.engine.TickManager;
+	import com.mikechambers.sgf.events.TickEvent;
+	import com.mikechambers.sgf.time.TickManager;
 
 	public class ChaserEnemy extends Enemy
 	{
