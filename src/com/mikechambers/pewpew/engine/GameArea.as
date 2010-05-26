@@ -513,7 +513,12 @@ package com.mikechambers.pewpew.engine
 			}				
 
 			var index:int = enemies.indexOf(s);
+						
+			
 			enemies.splice(index, 1);
+			
+			if(isUFO)
+				trace("enemies.length : " + enemies.length);			
 			
 			if(enemies.length < 1 && lives > -1)
 			{
