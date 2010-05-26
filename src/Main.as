@@ -17,6 +17,9 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	
+	//todo : need to do a check for when running in browser
+	import flash.desktop.NativeApplication;
 
 	public class Main extends MovieClip
 	{
@@ -86,31 +89,27 @@ package
 			}
 		}
 		
+		import com.mikechambers.sgf.time.TickManager;
+		private var tickManager:TickManager;
 		
+		private var _shouldResumeOnActivate = false;
 		private function onStageAdded(e:Event):void
 		{
 			viewManager = new ViewManager(this);
 			
 			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 			
-			
+			if(!tickManager)
+			{
+				tickManager = TickManager.getInstance();
+			}
 			
 			//this will create instance, and initialize sounds;
 			SoundManager.getInstance();
-			/*			
-			profileManager = new ProfileManager();
-			
-			profileManager.addEventListener(ScreenControlEvent.PROFILE_SELECTED,
-												onProfileSelected);
-												
-			viewManager.displayView(profileManager, ViewManager.NO_TRANSITION);
-			*/
 
-			/*
-			fpsView = new FPSView();
-			fpsView.y = stage.stageHeight - fpsView.height;
-			addChild(fpsView);
-			*/
+			//todo: check for running in browser
+			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, onActivate);
+			NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, onDeactivate)
 			
 			gameMenu = new GameMenu();
 			gameMenu.addEventListener(ScreenControlEvent.PLAY, onPlaySelect);
@@ -121,22 +120,22 @@ package
 			displayTitleGraphic();
 		}
 		
-		/*
-		private function onProfileSelected(e:ScreenControlEvent):void
+		private function onActivate(event:Event):void
 		{
-			//gotoAndStop(SELECT_SCREEN);
-			
-			if(!gameMenu)
+			if(_shouldResumeOnActivate)
 			{
-				gameMenu = new GameMenu();
-				gameMenu.addEventListener(ScreenControlEvent.PLAY, onPlaySelect);
+				tickManager.start();
 			}
-			
-			viewManager.displayView(gameMenu, ViewManager.NO_TRANSITION);
-			
-			displayTitleGraphic();
 		}
-		*/
+		
+		private function onDeactivate(event:Event):void
+		{
+			_shouldResumeOnActivate = tickManager.isRunning;
+			if(tickManager.isRunning)
+			{
+				tickManager.pause();
+			}
+		}
 		
 		private function onPlaySelect(e:ScreenControlEvent):void
 		{
