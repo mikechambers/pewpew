@@ -1,3 +1,16 @@
 #!/bin/bash
 
-adt -package -target ipa -storetype pkcs12 -keystore ~/Documents/certs/mike.chambers.p12 ../results/Main.ipa Main-app.xml Main.swf ../Default.png
+#make sure to run this from src/ dir
+#need to make proper build script
+#replace self_signed.p12 with your own self signed cert
+
+#To install on device : adb install -r PewPew.apk
+#adb is part of the android SDK
+#make sure device has USB Debugging enabled
+
+
+#build script for creating apk file for Android devices
+adt -package -target apk -storetype pkcs12 -keystore ~/Documents/certs/self_signed.p12 PewPew Main-app.xml AppIconsForPublish/Icon.png Main.swf
+
+#this builds a regular AIR 2.5 desktop version
+#adt -package -target ipa -storetype pkcs12 -keystore ~/Documents/certs/mike.chambers.p12 ../results/Main.ipa Main-app.xml Main.swf ../Default.png
