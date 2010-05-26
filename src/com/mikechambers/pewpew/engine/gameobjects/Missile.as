@@ -69,18 +69,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 			missileSound.play();
 		}
 		
-		CONFIG::DEBUG
-		{
-			private function missileOnTick():void{}
-		}
-		
 		protected override function onTick(e:TickEvent):void
-		{
-			CONFIG::DEBUG
-			{
-				missileOnTick();
-			}
-			
+		{		
 			e.stopPropagation();
 			
 			var shouldRemove:Boolean = false;

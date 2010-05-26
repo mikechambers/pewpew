@@ -89,17 +89,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 			//stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		}
 		
-		CONFIG::DEBUG
-		{
-			private function shipOnTick():void{}
-		}
-		
 		protected override function onTick(e:TickEvent):void
 		{			
-			CONFIG::DEBUG
-			{
-				shipOnTick();
-			}
 			
 			e.stopPropagation();
 
