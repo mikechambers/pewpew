@@ -26,6 +26,7 @@ package com.mikechambers.pewpew.engine.pools
 {
 	
 	import com.mikechambers.pewpew.engine.gameobjects.GameObject;
+	
 	import flash.utils.Dictionary;
 	
 	public class GameObjectPool
@@ -70,14 +71,13 @@ package com.mikechambers.pewpew.engine.pools
 			
 			if(pool.length)
 			{
+				trace("pool.pop ", classType, pool.length);
 				go = pool.pop();
 			}
 			else
 			{
 				go = new classType();
 			}
-
-			//trace("get", classType, pool.length);
 
 			return go;
 		}
@@ -86,14 +86,28 @@ package com.mikechambers.pewpew.engine.pools
 		{			
 			//put this property in game object as a static prop
 			var classType:Class = go["constructor"] as Class;
-						
+			
 			var pool:Array = getPool(classType);
-			pool.push(go);
+			
+			
+			var contains:Boolean = false;
+			for each(var g:GameObject in pool)
+			{
+				if(g == go)
+				{
+					contains = true;
+					break;
+				}
+			}
+			
+			if(!contains)
+			{
+				pool.push(go);
+			}
+			
 			go.pause();
 			go.x = -50;
 			go.y = -50;
-			
-			//trace("return", classType, pool.length);
 		}
 	}
 }

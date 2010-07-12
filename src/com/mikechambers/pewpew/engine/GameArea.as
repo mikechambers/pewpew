@@ -24,191 +24,216 @@
 
 package com.mikechambers.pewpew.engine
 {
-	import com.mikechambers.pewpew.memory.IMemoryManageable;
-	
 	import com.mikechambers.pewpew.engine.events.FireEvent;
 	import com.mikechambers.pewpew.engine.events.GameEvent;
-	import com.mikechambers.pewpew.ui.events.ScreenControlEvent;
 	import com.mikechambers.pewpew.engine.events.GameObjectEvent;
-	
-	import com.mikechambers.sgf.time.TickManager;
-	import com.mikechambers.sgf.events.TickEvent;
-	
+	import com.mikechambers.pewpew.engine.gameobjects.BasicEnemy;
+	import com.mikechambers.pewpew.engine.gameobjects.ChaserEnemy;
+	import com.mikechambers.pewpew.engine.gameobjects.Enemy;
+	import com.mikechambers.pewpew.engine.gameobjects.Explosion;
+	//import com.mikechambers.pewpew.engine.gameobjects.GameObject;
+	import com.mikechambers.pewpew.engine.gameobjects.Missile;
+	import com.mikechambers.pewpew.engine.gameobjects.Ship;
+	import com.mikechambers.pewpew.engine.gameobjects.UFOEnemy;
+	import com.mikechambers.pewpew.ui.GameController;
 	import com.mikechambers.pewpew.ui.ScoreBar;
 	import com.mikechambers.pewpew.ui.WaveCompletedView;
-	import com.mikechambers.pewpew.ui.GameController;
+	import com.mikechambers.pewpew.ui.events.ScreenControlEvent;
 	
-	import com.mikechambers.pewpew.engine.gameobjects.GameObject;	
-	import com.mikechambers.pewpew.engine.gameobjects.Ship;
-	import com.mikechambers.pewpew.engine.gameobjects.Missile;
-	import com.mikechambers.pewpew.engine.gameobjects.Enemy;
-	import com.mikechambers.pewpew.engine.gameobjects.UFOEnemy;
-	import com.mikechambers.pewpew.engine.gameobjects.ChaserEnemy;
-	import com.mikechambers.pewpew.engine.gameobjects.BasicEnemy;
-	import com.mikechambers.pewpew.engine.gameobjects.Explosion;
-	
+	import com.mikechambers.sgf.events.TickEvent;
+	import com.mikechambers.sgf.time.TickManager;
 	import com.mikechambers.sgf.utils.DisplayObjectUtil;
+	import com.mikechambers.sgf.pools.GameObjectPool;
+	import com.mikechambers.sgf.gameobjects.GameObject;
 	
-	import com.mikechambers.pewpew.engine.pools.GameObjectPool;	
-	
-	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.display.MovieClip;
 	import flash.display.Sprite;
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
-
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
-	
-
-	import flash.geom.Matrix;
-	import flash.geom.Matrix3D;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-
 	import flash.system.System;
-
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
-
-	import __AS3__.vec.Vector;
 	
+	//class that handles game play logic, and manages all
+	//game play items
 	public class GameArea extends Sprite
 	{		
+		//default starting number of lives
 		private static const DEFAULT_LIVES:uint = 2;
+		
+		//default number of starting enemies per level
 		private static const DEFAULT_NUMBER_ENEMIES:uint = 10;
 		
+		//interval in seconds to do special game checks
 		private static const GAME_CHECK_INTERVAL:Number = 7;
 	
 		//instantiated within FLA
 		public var scoreBar:ScoreBar;
 	
+		//player controlled ship
 		private var ship:Ship;
-		//private var target:Target;
+		
+		//game play bounds
 		private var bounds:Rectangle;
 		
+		//current score
 		private var score:uint;
+		
+		//current number of lives
 		private var lives:int;
+		
+		//current level / wave
 		private var wave:uint = 1;
 		
+		//vector of all active enemies
 		private var enemies:Vector.<Enemy>;
+		
+		//vector of all active ship missiles
 		private var missiles:Vector.<Missile>;
 		
+		//view displayed when a wave / level is completed
 		private var waveCompletedView:WaveCompletedView;
 		
-		private var missileBmpData:BitmapData;
-		private var collisionPoint1:Point = new Point();
-		private var collisionPoint2:Point = new Point();
-		
-		private var shipBmpData:BitmapData;
-		private var oldShipHash:int = 0;
-		
-		private var enemyBmpDataLookup:Dictionary = new Dictionary();		
-		
+		//tickManager instance to manage game play time
 		private var tickManager:TickManager;
+		
+		//current tick count
 		private var tickCount:uint = 0;
 	
+		//game controller / thumb paddle
 		public var gameController:GameController;
 	
+		//object pool for game
+		//todo: change this to use pool from SGF
 		private var gameObjectPool:GameObjectPool;		
 	
-		private var proximityManager:ProximityManager;
-	
+		/*************** initialization *************/
+		
+		//constructor for instance
 		public function GameArea()
 		{			
+			//initialize the enemies vector
 			enemies = new Vector.<Enemy>();
+			
+			//initialize the missiles vector
 			missiles = new Vector.<Missile>();
 			
+			//listen for when the instance is added to the stage
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded, false, 0, 
 																		true);
 		
+			//disable all mouse events since we dont need them here
+			//this is done for performance reasons
 			mouseEnabled = false;
 			mouseChildren = false;
 		}
 		
-		/*************** initialization *************/
+		
 		
 		/************** Flash engine Events **************/
 	
+		//called when instance is added to stage
 		private function onStageAdded(e:Event):void
 		{
+			//dont need to listen for this anymore
+			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
+			
+			//get an instance of the game object pool
 			gameObjectPool = GameObjectPool.getInstance();
+			
+			//set the game area bounds
 			bounds = new Rectangle(0,scoreBar.height, stage.stageWidth, 
 										stage.stageHeight - scoreBar.height);
-
-
-			proximityManager = new ProximityManager(35, bounds);
 			
 			
+			//position the game controller / thumb paddle
 			gameController.x = bounds.width - (gameController.width / 2);
 			gameController.y = bounds.height - (gameController.height / 2);
 			
-			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
-
+			//listen for when the instance is removed from the stage
 			addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 
 																	0, true);
 						
 		}
 		
+		//called when the instance is removed from the stage
 		private function onStageRemoved(e:Event):void
 		{
+			//remove listener, since we are already removed
 			removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
 			
+			//stop listening to the tickManager events
 			tickManager.removeEventListener(TickEvent.TICK, onTick);
 		}
 	
 	
 		/************ controll APIS ****************/
 	
+		//starts the game
 		public function start():void
 		{
+			//check if we have an instance of tickManager
 			if(!tickManager)
 			{
+				//if not, create one and start it
 				tickManager = TickManager.getInstance();
+				
+				//todo: look into why start is called inside the if statement
 				tickManager.start();
 			}
 						
+			//reset level
 			reset();
+			
+			//initialize player ship
 			initShip();
+			
+			//add enemies
 			addEnemies();			
 		}	
 	
+		//reset game state
 		private function reset():void
 		{
+			//todo: need to be more consitent on how we listen for events / weak
+			//listen for the onTick event from TickManager
 			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
 			
+			//reset tickCount
 			tickCount = 0;
+			
+			//remove all existing enemies
 			removeAllEnemies();
+			
+			//remove all existing missiles
 			removeAllMissiles();
 
+			//result current lives
 			lives = DEFAULT_LIVES;
+			
+			//result score
 			score = 0;
+			
+			//reset wave / level
 			wave = 1;
 			
 			//todo: move this to a setter so we can set it in one place
+			//update scorebar view
 			scoreBar.score = score;
 			scoreBar.lives = lives;
 			scoreBar.wave = wave;
 		}	
 		
-		private function removeAllSpritesFromVector(v:Vector.<GameObject>):void
-		{
-			var len:int = v.length;
-			
-			for(var i:int = len - 1; i >= 0; i--)
-			{
-				removeItem(v[i]);
-			}
-		}
-		
 		private function removeAllEnemies():void
 		{
-			//todo : performace : if this cast is slow, we can inline the loop
-			removeAllSpritesFromVector(Vector.<GameObject>(enemies));
-			
+			var len:int = enemies.length;
+		
+			for(var i:int = len - 1; i >= 0; i--)
+			{
+				removeEnemy(enemies[i]);
+			}
 		}		
 		
 		private function removeAllMissiles():void
@@ -410,6 +435,7 @@ package com.mikechambers.pewpew.engine
 					if(DisplayObjectUtil.hitTestCircle(enemyBounds,missile.getBounds(this)))
 					{
 						removeMissile(missile);
+
 						enemy.hit(missile.damage);
 
 						if(enemies.length == 0)
@@ -423,7 +449,7 @@ package com.mikechambers.pewpew.engine
 				{
 					destroyShip();
 
-					removeItem(enemy);
+					removeEnemy(enemy);
 					return;
 				}
 			}
@@ -500,7 +526,7 @@ package com.mikechambers.pewpew.engine
 		}		
 		
 		
-		private function removeItem(s:GameObject):void
+		private function removeEnemy(s:GameObject):void
 		{
 			s.removeEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed);
 			s.removeEventListener(GameObjectEvent.REMOVE, onRemoveItem);
@@ -605,7 +631,7 @@ package com.mikechambers.pewpew.engine
 			score += enemy.pointValue;
 			scoreBar.score = score;			
 			
-			removeItem(enemy);
+			removeEnemy(enemy);
 		}
 
 		private function onShipFire(e:FireEvent):void
@@ -642,7 +668,7 @@ package com.mikechambers.pewpew.engine
 		private function onRemoveItem(e:GameObjectEvent):void
 		{
 			e.stopImmediatePropagation();
-			removeItem(GameObject(e.target));
+			removeEnemy(GameObject(e.target));
 		}	
 	}
 

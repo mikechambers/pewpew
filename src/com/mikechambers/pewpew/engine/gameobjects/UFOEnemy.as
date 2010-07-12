@@ -25,6 +25,7 @@
 package com.mikechambers.pewpew.engine.gameobjects
 {	
 	import com.mikechambers.pewpew.engine.events.GameObjectEvent;
+	import com.mikechambers.sgf.gameobjects.GameObject;
 	import com.mikechambers.pewpew.engine.SoundManager;		
 	
 	import flash.display.Sprite;

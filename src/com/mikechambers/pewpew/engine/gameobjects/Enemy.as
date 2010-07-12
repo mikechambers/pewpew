@@ -24,16 +24,16 @@
 
 package com.mikechambers.pewpew.engine.gameobjects
 {
-	import com.mikechambers.pewpew.memory.IMemoryManageable;	
+	import com.mikechambers.pewpew.engine.events.GameObjectEvent;
+	import com.mikechambers.pewpew.memory.IMemoryManageable;
+	import com.mikechambers.sgf.gameobjects.GameObject;
 	
-	import com.mikechambers.pewpew.engine.events.GameObjectEvent;	
-	
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
-	import flash.display.DisplayObject;
 
-	public class Enemy extends GameObject
+	public class Enemy extends PewPewGameObject
 	{
 
 		public static const DEFAULT_POINT_VAULE:int = 100;

@@ -25,25 +25,23 @@
 package com.mikechambers.pewpew.engine.gameobjects
 {
 	import com.mikechambers.pewpew.engine.events.FireEvent;
-	import com.mikechambers.pewpew.utils.MathUtil;
-
-	import com.mikechambers.sgf.events.TickEvent;
-	import com.mikechambers.sgf.time.TickManager;	
 	import com.mikechambers.pewpew.ui.GameController;
+	import com.mikechambers.pewpew.utils.MathUtil;
+	import com.mikechambers.sgf.events.TickEvent;
+	import com.mikechambers.sgf.gameobjects.GameObject;
+	import com.mikechambers.sgf.pools.GameObjectPool;
+	import com.mikechambers.sgf.time.TickManager;
 	
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
-	import flash.events.MouseEvent;
-	import flash.display.DisplayObject;
-	
-	import com.mikechambers.pewpew.engine.pools.GameObjectPool;	
-	
-	import flash.geom.Point;
 
-	public class Ship extends GameObject
+	public class Ship extends PewPewGameObject
 	{
 		private static const SPEED:Number = 3.5 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		

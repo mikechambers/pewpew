@@ -24,20 +24,19 @@
 
 package com.mikechambers.pewpew.engine.gameobjects
 {
+	import com.mikechambers.pewpew.engine.SoundManager;
 	import com.mikechambers.pewpew.engine.events.GameObjectEvent;
-	
+	import com.mikechambers.sgf.events.TickEvent;
+	import com.mikechambers.sgf.gameobjects.GameObject;
 	import com.mikechambers.sgf.time.TickManager;
-	import com.mikechambers.sgf.events.TickEvent;		
-		
-	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.geom.Rectangle;
 	
 	import flash.display.DisplayObject;
-	import com.mikechambers.pewpew.engine.SoundManager;	
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.geom.Rectangle;	
 
 	//todo: should we make this extend Enemy?
-	public class Missile extends GameObject
+	public class Missile extends PewPewGameObject
 	{
 		private static const SPEED:Number = 6.0 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		private var direction:Number;
