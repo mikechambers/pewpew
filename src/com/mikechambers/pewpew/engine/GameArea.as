@@ -31,7 +31,6 @@ package com.mikechambers.pewpew.engine
 	import com.mikechambers.pewpew.engine.gameobjects.ChaserEnemy;
 	import com.mikechambers.pewpew.engine.gameobjects.Enemy;
 	import com.mikechambers.pewpew.engine.gameobjects.Explosion;
-	//import com.mikechambers.pewpew.engine.gameobjects.GameObject;
 	import com.mikechambers.pewpew.engine.gameobjects.Missile;
 	import com.mikechambers.pewpew.engine.gameobjects.Ship;
 	import com.mikechambers.pewpew.engine.gameobjects.UFOEnemy;
@@ -107,7 +106,10 @@ package com.mikechambers.pewpew.engine
 	
 		//object pool for game
 		//todo: change this to use pool from SGF
-		private var gameObjectPool:GameObjectPool;		
+		private var gameObjectPool:GameObjectPool;
+		
+		//Whether there is already a UFOEnemy in the game area
+		private var ufoOnStage:Boolean = false;
 	
 		/*************** initialization *************/
 		
@@ -225,100 +227,157 @@ package com.mikechambers.pewpew.engine
 			scoreBar.lives = lives;
 			scoreBar.wave = wave;
 		}	
-		
+	
+		//removes all of the enemies from the game play area
 		private function removeAllEnemies():void
 		{
 			var len:int = enemies.length;
 		
 			for(var i:int = len - 1; i >= 0; i--)
 			{
+				//note that removeEnemy does a slice to remove the specified
+				//enemy.
+				//for removing all enemies, we could refactor to just set enemies.length = 0
+				//but would have to include code from removeEnemy
+				//given the fact that we never have more that 12 or so enemies at once, 
+				//we are fine as is. However, if we added tons of enemies, it might be something
+				//worth considering
 				removeEnemy(enemies[i]);
 			}
 		}		
 		
+		
+		//removes all missiles from the gameplay area
 		private function removeAllMissiles():void
 		{
 			var len:int = missiles.length;
 			
 			for(var i:int = len - 1; i >= 0; i--)
 			{
+				//see comment above in removeAllEnemies, for possible
+				//optimization
 				removeMissile(missiles[i]);
 			}
 		}
 
+		//resets all enemies and removes them from the game area		
 		private function resetEnemies():void
 		{			
-			//todo: should profile using for in loop
 			for each(var e:Enemy in enemies)
 			{
 				gameObjectPool.returnGameObject(e);
 			}
 		}
 		
+		//reinitializes all enemies
 		private function restartEnemies():void
 		{
+			//make sure there are not any stray missiles that could
+			//collide when the enemy spawns
 			removeAllMissiles();
+			
 			for each(var e:Enemy in enemies)
 			{
+				//reinitialize 
 				e.target = ship;
-				
 				e.initialize(bounds, ship, wave);
+				
+				//add to stage
 				addGameObject(e);
 			}
 		}
 		
+		//initializes players ship
 		private function initShip():void
 		{
+			trace("init ship");
+			//get a ship instance from the object pool
 			ship = Ship(gameObjectPool.getGameObject(Ship));
+			
+			//reinitialize it
 			ship.initialize(bounds, null, 1);
+			
+			//set the controller for the ship
 			ship.gameController = gameController;
 			
+			//listen for when the ship fires
 			ship.addEventListener(FireEvent.FIRE, onShipFire, false, 0, true);
 			
+			//add ship to stage
 			addGameObject(ship);
 			
-			ship.x = 200;
-			ship.y = 200;
+			//position on stage
+			ship.x = bounds.width / 2;
+			ship.y = bounds.height / 2;
 		}
 		
+		//add an initialize a new wave of enemies
 		private function addEnemies():void
 		{
+			//make sure there are no stray missiles
 			removeAllMissiles();
+			
 			var enemy:Enemy;
 			
+			//todo: should refactor to add ALL enemies (basic and advanced)
+			//at same time.
+			
+			//loop through and create the enemies
 			for(var i:int = 0; i < DEFAULT_NUMBER_ENEMIES; i++)
 			{
-				
+				//get enemy instance from object pool
 				enemy = BasicEnemy(gameObjectPool.getGameObject(BasicEnemy));
+				
+				//initialize
 				enemy.initialize(bounds, null, 1 + (wave/5));
 				
+				//listen for when it gets destroyed
 				enemy.addEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed, 
 															false, 0, true);
+				
+				//add object to stage
 				addGameObject(enemy);
+				
+				//added to enemies vector
 				enemies.push(enemy);
 			}
 			
+			//check if we are at wave 4 or higher
 			if(wave > 3)
 			{
 				var len:int = 1;
 				
+				// some logic to add more advanced enemies at high levels
 				if(wave >= 9)
 				{
+					//wave 9 or higher, add 3
 					len = 3;
 				}
 				else if(wave > 6)
 				{
+					//wave 7 or higher, add 2
 					len = 2;
 				}
 				
+				//otherwise add 1
+				
 				while(len-- != 0)
 				{
+					//add chaser enemies
 					enemy = ChaserEnemy(gameObjectPool.getGameObject(ChaserEnemy));
+					
+					//initialize
 					enemy.initialize(bounds, ship, wave);
-					enemy.addEventListener(GameObjectEvent.DESTROYED, 
-															onEnemyDestroyed, 
-															false, 0, true);
+					
+					
+					//listen for when it gets destroyed
+					enemy.addEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed, 
+						false, 0, true);
+					
+					//add object to stage
 					addGameObject(enemy);
+					
+					//added to enemies vector
 					enemies.push(enemy);
 				}
 			}
@@ -326,15 +385,24 @@ package com.mikechambers.pewpew.engine
 		
 		/********** game events *************/
 		
+		//tick event, called on each game time interval
 		private function onTick(e:TickEvent):void
 		{
-			
+			//stop propogation of event for performance reasons
 			e.stopPropagation();
+			
+			//check and see if there are any game object collisions
 			checkCollisions();
 			
+			//update overall tick count
 			tickCount++;
+			
+			//check if tick count is evenly divided by FPS (one second)
 			if(!(tickCount % TickManager.FPS_RATE))
 			{
+				//see if it is time to do a game check to potentially
+				//change game state
+				//GAME_CHECK_INTERVAL is in seconds
 				if(!(tickCount % GAME_CHECK_INTERVAL * TickManager.FPS_RATE))
 				{
 					gameCheck();
@@ -342,46 +410,73 @@ package com.mikechambers.pewpew.engine
 			}
 		}
 
-		private var ufoOnStage:Boolean = false;
+
+		//called when it is time to potentially change the game state during
+		//a game
 		private function gameCheck():void
 		{
+			//if we are on wave one, do nothing
 			if(wave < 2)
 			{
 				return;
 			}
 			
+			//randomly dont do anyting (odds depend on the current wave)
 			if((Math.random() * 100) + wave < 50)
 			{
 				return;
 			}
 			
+			//check to see if a UFOEnemy is already on stage
 			if(!ufoOnStage)
 			{
+				//get an instance of the UFOEnemy
 				var enemy:UFOEnemy = UFOEnemy(gameObjectPool.getGameObject(UFOEnemy));
+				
+				//todo: we could move code below into its own function. This is done in a couple
+				//of different places
+				
+				//initialize it
 				enemy.initialize(bounds, ship, 1 + (wave/5));
+				
+				//list for destroyed event
 				enemy.addEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed, 
 															false, 0, true);
+				
+				//listen for REMOVE event (when it goes off stage)
 				enemy.addEventListener(GameObjectEvent.REMOVE, onRemoveItem, false, 
 																	0, true);
 
+				//set that there is a UFOEnemy on stage
 				ufoOnStage = true;
+				
+				//add to stage
 				addGameObject(enemy);
+				
+				//add to enemies vector
 				enemies.push(enemy);		
 			}
 		}
 		
+		//adds a game object to the stage (if it is not already on the stage)
 		private function addGameObject(go:GameObject, setToBottom:Boolean = false):void
 		{
+			//check and see if it is already on the display list
 			if(!contains(go))
 			{
+				
+				//if not, add it
 				addChild(go);
 				
+				//check if we want to set the item to the bottom of the z order
 				if(setToBottom)
 				{
+					//if so, set it
 					setChildIndex(go, 0);
 				}
 			}
 			
+			//tell the game object to start
 			go.start();
 		}
 		
@@ -445,6 +540,8 @@ package com.mikechambers.pewpew.engine
 					}
 				}
 				
+				//todo: might be an issue here where an enemy could be destroyed by a missile above (and
+				//removed) but it would still be checked for collision against the ship here.
 				if(DisplayObjectUtil.hitTestCircle(shipBounds,enemyBounds))
 				{
 					destroyShip();
