@@ -34,58 +34,99 @@ package com.mikechambers.pewpew.ui
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 
+	/*
+		Class that creates a game controller / thumb pad
+		for controlling the ship on touch devices
+	
+		Graphics are defined in FLA
+	*/
 	public class GameController extends Sprite
 	{
+		//reference to tick manager
 		private var tickManager:TickManager;
+		
+		//current angle that the controller is rotated
 		private var _angle:Number = 0;
+		
+		//some point instances we cache and reuse (for performance)
+		private var p1:Point = new Point();
+		private var p2:Point = new Point();		
+		
+		//constructor
 		public function GameController()
 		{
 			super();
+			
+			//listen for when the controller is added to the stage
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded, false, 0, 
 																		true);
-																		
+														
+			//get a reference to the tick manager
 			tickManager = TickManager.getInstance();
 			
+			//disable mouse events (for performance reasons)
 			mouseEnabled = false;
 			mouseChildren = false;
-			//cacheAsBitmapMatrix = new Matrix();
+			
+			//cache graphics.
+			//need to set cacheAsBitmapMatrix since the sprite is rotated
+			cacheAsBitmapMatrix = new Matrix();
 			cacheAsBitmap = true;
 		}
 	
+		//called when the controller is added to the stage
 		private function onStageAdded(e:Event):void
 		{			
-			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
-			addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 0, true);
+			//remove listener
 			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
+			
+			//listen for tick events
+			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
+			
+			//listen for when controller is removed from the stage
+			addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 0, true);
+			
 		}
 		
+		//called when the controller is removed from the stage
 		private function onStageRemoved(e:Event):void
 		{
+			//remove tick listener
 			removeEventListener(TickEvent.TICK, onTick);
+			
+			//remove listener
 			removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
 			
+			//listen for when controller is added to the stage
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded, false, 0, 
 																		true);
 		}
 		
+		//current angle of the controller
 		public function get angle():Number
 		{
 			return _angle;
 		}
 		
-		private var p1:Point = new Point();
-		private var p2:Point = new Point();
+		//called and game tick interval
 		public function onTick(e:TickEvent):void
 		{
+			//get the position of the mouse
 			p1.x = stage.mouseX;
 			p1.y = stage.mouseY;
 
+			//position of controller
+			//todo: we dont need to look this up everytime, since it doesnt change
 			p2.x = x;
 			p2.y = y;
 			
+			//get the angle between the controller and the mouse / finger
 			var angle:Number = MathUtil.getAngleBetweenPoints(p1, p2);
 
+			//set the rotation of the controller to the angle
 			rotation = MathUtil.radiansToDegrees(angle);
+			
+			//save the angle position
 			_angle = angle;
 		}
 		

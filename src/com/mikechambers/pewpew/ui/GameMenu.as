@@ -31,23 +31,37 @@ package com.mikechambers.pewpew.ui
 	import flash.events.MouseEvent;
 	import flash.events.Event;
 	
+	/*
+		Class that creates and displays the main game menu
+	
+		graphics are defined in the FLA
+	*/
 	public class GameMenu extends Sprite
 	{
+		//reference to play button
 		public var playButton:SimpleButton;
+		
+		//other buttons and functionality which are not implimented
 		//public var highScoresButton:SimpleButton;
 		//public var statsButton:SimpleButton;
 		
+		//constructor
 		public function GameMenu()
 		{
+			//listen for when we are added to the stage
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 			
+			//set the label for the play button
 			playButton.label = "Play";
+			
 			//highScoresButton.label = "High Scores";
 			//statsButton.label = "Stats";
 		}
 		
+		//called when the instance is added to the stage
 		private function onStageAdded(e:Event):void
 		{
+			//listen for when the play button is clicked
 			playButton.addEventListener(MouseEvent.CLICK, onPlayClick, false, 
 																	0, true);
 			
@@ -60,12 +74,16 @@ package com.mikechambers.pewpew.ui
 																	false, 
 																	0, true);
 			*/
+			
+			//listen for when we are removed from the stage
 			addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 
 																	0, true);
 		}
 		
+		//called when we are removed from the stage
 		private function onStageRemoved(e:Event):void
 		{
+			//remove listener
 			playButton.removeEventListener(MouseEvent.CLICK, onPlayClick);
 			
 			/*
@@ -74,18 +92,26 @@ package com.mikechambers.pewpew.ui
 															
 			statsButton.removeEventListener(MouseEvent.CLICK, onStatsClick);
 			*/
+			
+			//remove listener
 			removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
 			
+			//listen for when we are added to the stage
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 		}
 		
+		//called when the user presses the play button
 		private function onPlayClick(e:MouseEvent):void
 		{
+			//broadcast the play event
 			var sce:ScreenControlEvent = 
 							new ScreenControlEvent(ScreenControlEvent.PLAY);
 							
 			dispatchEvent(sce);
 		}
+		
+		
+		//not currently implimented
 		
 		/*
 		private function onHighScoresClick(e:MouseEvent):void

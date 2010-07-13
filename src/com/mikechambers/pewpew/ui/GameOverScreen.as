@@ -32,40 +32,61 @@ package com.mikechambers.pewpew.ui
 	
 	import flash.display.Sprite;
 	
+	/*
+		Class that creates a displays the game over view
+	
+		graphics defined in FLA
+	*/
 	public class GameOverScreen extends Sprite
 	{
+		//reference to play again button
 		public var playAgainButton:SimpleButton;
 		
+		//constructor
 		public function GameOverScreen()
 		{
+			//set button label
 			playAgainButton.label = "Play Again";
 
+			//listen for when we are added to the stage
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 		}
 
+		//called when instance is added to the stage
 		public function onStageAdded(e:Event):void
 		{			
+			//remove listener
+			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
+			
+			//listen for when the play again button is clicked
 			playAgainButton.addEventListener(MouseEvent.CLICK, onPlayAgainClick, 
 																	false, 
 																	0, true);
-																	
+															
+			//listen for when instance is removed from the stage
 			addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 
 																	0, true);
 		}
 
+		//called when instance is removed from the stage
 		private function onStageRemoved(e:Event):void
 		{
+			//remove listener
 			playAgainButton.removeEventListener(MouseEvent.CLICK, 
 															onPlayAgainClick);
 
+			//remove listener
 			removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
 
+			//listen for when we are added to the stage
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded, false, 0, 
 																		true);
 		}		
-
+		
+		//called when play again button is pressed
 		private function onPlayAgainClick(e:MouseEvent):void
 		{
+			//broadcast play event
 			var sce:ScreenControlEvent = 
 									new ScreenControlEvent(
 											ScreenControlEvent.PLAY
