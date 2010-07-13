@@ -36,6 +36,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 
 	/*
 		Represents a ChaserEnemy, which will track and chase the ship.
+	
+		Note that graphics for this Enemy are defined within the FLA
 	*/
 	public class ChaserEnemy extends Enemy
 	{

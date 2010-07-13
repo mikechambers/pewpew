@@ -35,6 +35,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 
 	/*
 		Class that represents the default / basic enemy in the game.
+	
+		Note that graphics for this Enemy are defined within the FLA
 	*/
 	public class BasicEnemy extends Enemy
 	{
