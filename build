@@ -3,6 +3,7 @@
 #make sure to run this from src/ dir
 #need to make proper build script
 #replace self_signed.p12 with your own self signed cert
+#requires AIR 2.5 for android SDK
 
 #To install on device : adb install -r PewPew.apk
 #adb is part of the android SDK
