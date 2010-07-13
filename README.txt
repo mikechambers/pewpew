@@ -27,7 +27,6 @@ PewPew
 Mike Chambers
 mikechambers@gmail.com
 
-This is a very early alpha version.
+Code is completely commented, but game is not production ready.
 
-
-
+There are a lot of obsolete optimizations added over the lifetime of the project at the AIR for iPhone runtime was developed, and then as AIR for Android was being developed.
