@@ -32,32 +32,44 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 
+	//Abstract class that represents an enemy and is meant
+	//to be subclassed
 	public class Enemy extends PewPewGameObject
 	{
 
+		//default point value
 		public static const DEFAULT_POINT_VAULE:int = 100;
 
+		//constructor
 		public function Enemy()
 		{
 		}
 		
+		//return point value
 		public function get pointValue():int
 		{
 			return DEFAULT_POINT_VAULE;
 		}
 
+		//called when the enemy takes damage
 		public function hit(damage:Number):void
 		{
+			//subtract health
 			health -= damage;
 			
+			//if less that 0
 			if(health <= 0)
 			{
+				//destroy enemy
 				destroy();
 			}
 		}
 		
+		//called when the enemy is out of health and should
+		//be destroyed
 		protected function destroy():void
 		{			
+			//dispatch destroyed event
 			var e:GameObjectEvent = new GameObjectEvent(GameObjectEvent.DESTROYED);
 			dispatchEvent(e);
 		}
