@@ -37,20 +37,33 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import com.mikechambers.sgf.events.TickEvent;
 	import com.mikechambers.sgf.time.TickManager;
 
+	/*
+		Class that represents a UFOEnemy.
+	
+		This enemy appears at intervals in later stages
+		and moves across the screen
+	*/
 	public class UFOEnemy extends Enemy
 	{
+		//base point value
 		private static const POINT_BASE:int = 150;
+		
+		//base speed
 		private static const SPEED:Number = 2.0  * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		
+		//x and y vectors
 		private var vx:Number;
 		private var vy:Number;
 		
+		//reference to UFO sound
 		private var sound:UFONoiseSound;
 		private var soundChannel:SoundChannel;
 		
+		//some constants for direction
 		private static const RIGHT:uint = 0;
 		private static const LEFT:uint = 1;
 		
+		//direction the UFO is travelling
 		private var direction:uint;
 		
 		public function UFOEnemy()
@@ -69,6 +82,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 		{
 			super.initialize(bounds, target, modifier);
 			
+			//randomly assign a direction (left or right)
 			direction = LEFT;
 			if(Math.random() > .5)
 			{
@@ -77,36 +91,50 @@ package com.mikechambers.pewpew.engine.gameobjects
 				
 		}
 		
+		//starts the ufo
 		public override function start():void
 		{
 			super.start();
+			
+			//initialize position
 			initPosition();
 			
+			//get sound reference
+			//todo: should we just reuse the sound instance between instances
 			sound = UFONoiseSound(SoundManager.getInstance().getSound(SoundManager.UFO_SOUND));
+			
+			//play sound
 			soundChannel = sound.play(0);			
 		}	
 		
+		//pause the ufo
 		public override function pause():void
 		{
 			super.pause();
 			
+			//stop playing the sound
 			soundChannel.stop();
 			sound = null;
 			soundChannel = null;
 		}
 		
+		//get the point value for the UFO when it is destroyed
 		public override function get pointValue():int
 		{
+			//base value
 			var value:int = POINT_BASE;
 			
 			if(modifier > 1)
 			{
+				//add modifier value based on current level / wave
 				value += (modifier * 20);
 			}
 			
 			return int(Math.round(value));
 		}		
 		
+		//called when the UFO is removed from the stage
+		//todo: is this necessary here?
 		protected override function onStageRemoved(e:Event):void
 		{
 			super.onStageRemoved(e);
@@ -114,8 +142,10 @@ package com.mikechambers.pewpew.engine.gameobjects
 			stop();
 		}
 		
+		//initialize UFO starting position
 		private function initPosition():void
 		{
+			//determine x position
 			if(direction == RIGHT)
 			{
 				x = 0;
@@ -125,8 +155,10 @@ package com.mikechambers.pewpew.engine.gameobjects
 				x = bounds.right;
 			}
 			
+			//randomly choose a y position
 			y = Math.random() * bounds.height;
 			
+			//make sure it is not too close to the top or bottom
 			if(y < 20)
 			{
 				y = 20;
@@ -136,6 +168,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 				y = bounds.height - 20;
 			}
 			
+			//modify x speed based on level
 			if(modifier < 5)
 			{
 				vx = 3;
@@ -153,15 +186,22 @@ package com.mikechambers.pewpew.engine.gameobjects
 				vx = 6;
 			}
 			
+			//set y speed
 			vy = .1;
 		}
 		
 		private var angle:Number = 0;
+		
+		//called on game tick / timer intervals
 		protected override function onTick(e:TickEvent):void
 		{				
+			//stop event propagation for performance reasons
 			e.stopPropagation();
 			
+			//figure out whether we should remove the ship
 			var shouldRemove:Boolean = false;
+			
+			//check to see if it has gone outside of the game area bounds
 			if(x + width < 0 || x > bounds.width + width)
 			{
 				shouldRemove = true;
@@ -170,15 +210,18 @@ package com.mikechambers.pewpew.engine.gameobjects
 			{
 				shouldRemove = true;
 			}
-			
+		
 			if(shouldRemove)
 			{				
+				//if we need to remove the UFO, broadcast
+				//a remove event
 				var eie:GameObjectEvent = new GameObjectEvent(GameObjectEvent.REMOVE);
 				dispatchEvent(eie);				
 				
 				return;
 			}
 			
+			//update x position depending on direction
 			if(direction == RIGHT)
 			{
 				this.x += vx;
@@ -188,7 +231,11 @@ package com.mikechambers.pewpew.engine.gameobjects
 				this.x -= vx;
 			}
 			
+			//update angle
 			angle += vy;
+			
+			//update y position based on sine of angle (this
+			//will make it go up and down).
 			this.y += Math.sin(angle);			
 		}		
 	}
