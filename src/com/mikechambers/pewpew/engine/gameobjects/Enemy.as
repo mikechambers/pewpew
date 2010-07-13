@@ -25,7 +25,6 @@
 package com.mikechambers.pewpew.engine.gameobjects
 {
 	import com.mikechambers.pewpew.engine.events.GameObjectEvent;
-	import com.mikechambers.pewpew.memory.IMemoryManageable;
 	import com.mikechambers.sgf.gameobjects.GameObject;
 	
 	import flash.display.DisplayObject;

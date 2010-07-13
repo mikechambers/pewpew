@@ -124,16 +124,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 			this.y += vy;	
 		}		
 		
-		public override function dealloc():void
-		{
-			super.dealloc();
-			
-			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-			
-			target = null;
-		}
-		
 		private var mouseDown:Boolean = false;
 		private function onMouseDown(e:MouseEvent):void
 		{	

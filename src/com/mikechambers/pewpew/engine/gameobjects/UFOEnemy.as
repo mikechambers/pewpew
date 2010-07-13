@@ -190,20 +190,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 			
 			angle += vy;
 			this.y += Math.sin(angle);			
-		}
-	
-		
-		public override function dealloc():void
-		{
-			super.dealloc();
-			
-			if(soundChannel)
-			{
-				soundChannel.stop();
-				sound = null;
-				soundChannel = null;
-			}
 		}		
-		
 	}
 }

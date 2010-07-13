@@ -219,13 +219,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 			//update position
 			this.x += vx;
 			this.y += vy;
-		}		
-		
-		public override function dealloc():void
-		{
-			super.dealloc();
-			target = null;
-		}			
+		}				
 	}
 
 }

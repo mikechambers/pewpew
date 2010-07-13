@@ -26,7 +26,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 {
 	import com.mikechambers.pewpew.engine.SoundManager;
 	import com.mikechambers.pewpew.engine.events.GameEvent;
-	import com.mikechambers.pewpew.memory.IMemoryManageable;
 	import com.mikechambers.sgf.events.TickEvent;
 	import com.mikechambers.sgf.gameobjects.GameObject;
 	
@@ -73,12 +72,6 @@ package com.mikechambers.pewpew.engine.gameobjects
 				dispatchEvent(ep);
 			}
 		} 
-		
-		public override function dealloc():void
-		{
-			super.dealloc();
-			stop();
-		}
 	}
 
 }
