@@ -482,57 +482,108 @@ package com.mikechambers.pewpew.engine
 		
 		/********* game engine APIs **********/
 		
+		//creates and positions an explosion object
 		private function createExplosion(px:Number, py:Number):void
 		{
+			//get an explosion instance
 			var exp:Explosion = Explosion(gameObjectPool.getGameObject(Explosion));
+			
+			//initialize it
 			exp.initialize(bounds);
 			
+			//set position
 			exp.x = px;
 			exp.y = py;
 			
+			//listen for its complete event
 			exp.addEventListener(GameEvent.EXPLOSION_COMPLETE, 
 														onExplosionComplete, 
 														false, 0, true);
 			
+			//add to game area
 			addGameObject(exp);	
 		}
 		
+		//check collisions between game objects
+		//specifically, missiles and enemies
+		//and enemies and the player's ship
 		private function checkCollisions():void
 		{
+			/*
+			Note, collision detection has been one of the areas
+			where there has been extesnive optimizations and refactoring
+			for performance reasons.
 			
+			The current version does a simple cirlce bounds test, which offers
+			a good balance between performance, and visual accuracy.
+			
+			You can see a summary of various collision detection methods (most
+			tried here at one point or another) at:
+			
+			http://www.mikechambers.com/blog/2009/06/26/relative-performance-for-collision-detection-techniques-in-actionscript-3/
+			
+			The most accurate detection used was doing pixel perfect collision detection:
+			http://www.mikechambers.com/blog/2009/06/24/using-bitmapdata-hittest-for-collision-detection/
+			http://www.mikechambers.com/blog/2009/06/25/strategies-for-optimizing-collision-detection-with-bitmapdata-hittest/
+			
+			however, this was removed to improve performance on iphone.
+			
+			I had also implimented pixel perfect collision detection with a grid based
+			system for pairing down the tests that needed to be run. Again, this didnt perform great
+			on iphone.
+			
+			http://www.mikechambers.com/blog/tag/as3dtc1/
+			
+			However, the current android based devices seem to run AIR / Flash content
+			very well, and it may be possible to reimpliment pixel perfect collision detection with 
+			a grid based checkl.
+			
+			*/
 			
 			//frameCount++;
 			//check 1 out of every 3 frames
+			//this is done for performance reasons.
+			//can adjust depending on platform, and its performance
+			//profile that the game is running on
 			if((tickCount % 3) != 0)
 			{
 				return;
 			}
 			
+			//if for some reason there is no ship, then dont do anything
 			if(!ship)
 			{
 				return;
 			}
 			
-			//DisplayObjectUtil.hitTestCircle
-			//we might be able to speed this up storing in a local function
-			//we should test this
-						
+			//get the bounds for the ship.
 			var shipBounds:Rectangle = ship.getBounds(this);
 			
 			
 			
-			//for each(var missile:Missile in missiles)
+			//loop through all of the enemies and check for collisions with missiles
+			//and ships
 			for each(var enemy:Enemy in enemies)
 			{			
+				//get the bounds of the current enemy
 				var enemyBounds:Rectangle = enemy.getBounds(this);
+				
+				//loop through all of the missiles
 				for each(var missile:Missile in missiles)
 				{
+					//do a simple circle hit test check between thie missile and enemy bounds
 					if(DisplayObjectUtil.hitTestCircle(enemyBounds,missile.getBounds(this)))
 					{
+						//if they hit, remove the missile
 						removeMissile(missile);
 
+						// do damage to the enemy. This hit API is here so an enemy could have
+						//different levels of hits points or conditions for being destroyed.
+						//right now, all enemies will be killed by a single shot, and will be removed
+						//from the stage immediately
 						enemy.hit(missile.damage);
 
+						//if there are no more enemies, then stop looping
 						if(enemies.length == 0)
 						{
 							return;
@@ -542,229 +593,349 @@ package com.mikechambers.pewpew.engine
 				
 				//todo: might be an issue here where an enemy could be destroyed by a missile above (and
 				//removed) but it would still be checked for collision against the ship here.
+				
+				//check and see if an enemy is colliding with the player's ship
 				if(DisplayObjectUtil.hitTestCircle(shipBounds,enemyBounds))
 				{
+					//if so, destroy the ship
 					destroyShip();
 
+					//remove the enemy
 					removeEnemy(enemy);
 					return;
 				}
 			}
 		}
 				
+		//called when a wave / level is completed
 		private function waveCompleted():void
 		{
+			//there is a pause in the action, so lets call the
+			//garbage collector.
+			//probably not really necessary anymore
 			System.gc();
 			
+			//create a new instance of the WaveCompletedView. We are not caching it
+			//since it content changes everytime (level #)
 			waveCompletedView = new WaveCompletedView();
+			
+			//listen for then the wave view is done being display
 			waveCompletedView.addEventListener(GameEvent.WAVE_VIEW_COMPLETE, 
 														onWaveViewCompleted, 
 															false, 0, true);
+			
+			//add the view to the game area
 			addChild(waveCompletedView);
 			
+			//tell the view what wave was just completed
 			waveCompletedView.display(wave);
 			
+			
+			//position it in the center of the stage.
 			waveCompletedView.x = bounds.width / 2 - 
 												(waveCompletedView.width / 2);
 			waveCompletedView.y = bounds.height / 2 - waveCompletedView.height;
 			
-			//timer.reset();
+			//reset tickCount
 			tickCount = 0;
 		}		
 		
 		//todo: use a third party libary for this event chaining
+		//timer used to track time after a ship it hit
 		private var deathPauseTimer:Timer;
+		
+		//called when the player's ship should be destroyed
+		//i.e. when it is hit by an enemy
 		private function destroyShip():void
 		{			
+			//get the ships bounds
 			var b:Rectangle = ship.getBounds(this);
+			
+			//create an explosion in the position that the ship was
 			createExplosion(b.x + (b.width *.5), 
 								b.y + (b.height * .5));
 			
+			//remove the fire event listener from the ship
 			ship.removeEventListener(FireEvent.FIRE, onShipFire);
 			
+			//return the ship to the object pool
 			gameObjectPool.returnGameObject(ship);
 			
 			ship = null;
 			
+			//decrement the number of player / ship lives
 			lives--;
 			
-			
+			//null out the target for all of the enemies
 			for each(var enm:Enemy in enemies)
 			{
 				enm.target = null;
 			}
 			
+			//check and see if there are no more lives
 			if(lives < 0)
 			{
+				//if not, call GC
 				System.gc();
+				
+				//dispatch a game over event
 				var e:ScreenControlEvent = 
 							new ScreenControlEvent(ScreenControlEvent.GAME_OVER);
 				dispatchEvent(e);
 			}
 			else
 			{
-				
+				//update scoreboard with new number of lives
 				scoreBar.lives = lives;
 
+				//if there are not more enemies (last one hit the ship)
 				if(enemies.length < 1)
 				{
+					//complete the wave
 					waveCompleted();
 					return;
 				}
 				
+				//start the death pause timer
 				deathPauseTimer = new Timer(2000);
 				deathPauseTimer.addEventListener(TimerEvent.TIMER, 
 														onDeathPauseTimer, 
 														false, 0, true);
 				deathPauseTimer.start();
 
+				//stop listening for tick events
 				tickManager.removeEventListener(TickEvent.TICK, onTick);
 			}
 		}		
 		
-		
+		//removes the specified enemy from the game area
 		private function removeEnemy(s:GameObject):void
 		{
+			//remove event listeners
 			s.removeEventListener(GameObjectEvent.DESTROYED, onEnemyDestroyed);
 			s.removeEventListener(GameObjectEvent.REMOVE, onRemoveItem);
 
+			//return the enemy to the object pool
 			gameObjectPool.returnGameObject(s);
 							
+			//if the enemy is a UFOEnemy
 			if(s is UFOEnemy)
 			{
+				//set that there are not UFOEnemies on stage
 				ufoOnStage = false;
 			}				
 
+			//find the index of the enemies in the enemies vector
 			var index:int = enemies.indexOf(s);
 						
-			
+			//remove it
 			enemies.splice(index, 1);			
 			
+			//check to see if there are anymore enemies
 			if(enemies.length < 1 && lives > -1)
 			{
 				waveCompleted();
 			}
+		}		
+		
+		
+		//removes the specified missile from the game area
+		private function removeMissile(missile:Missile):void
+		{
+			//return the missile to the object pool
+			gameObjectPool.returnGameObject(missile);
 			
-			//IMemoryManageable(s).dealloc();
+			//remove the listeners from the missile
+			missile.removeEventListener(GameObjectEvent.REMOVE_MISSILE, onRemoveMissile);
+			
+			//find the index of the missile in the missiles vector
+			var index:int = missiles.indexOf(missile);
+			
+			//remove the missile
+			missiles.splice(index, 1);
 		}		
 		
 		/*********** game engine events ***********/
 		
+		//called when an explosion has completed its anaimation
 		private function onExplosionComplete(e:GameEvent):void
 		{
+			//stop the event propagation for performance reasons
 			e.stopImmediatePropagation();
 			
+			//get a reference to the explosion
 			var explosion:Explosion = Explosion(e.target);
+			
+			//remove the event listeners
 			explosion.removeEventListener(GameEvent.EXPLOSION_COMPLETE, 
 														onExplosionComplete);
+			
+			//return the explosion to the object pool
 			gameObjectPool.returnGameObject(explosion);
-			//explosion.dealloc();
 		}
 		
+		//called when the wave view is done being displayed
 		private function onWaveViewCompleted(e:GameEvent):void
 		{
+			//stop the event propagation for performance reasons
 			e.stopImmediatePropagation();
 			
+			//remove the wave completed view from the display list
 			removeChild(waveCompletedView);
+			
+			//stop listening for the event
 			waveCompletedView.removeEventListener(GameEvent.WAVE_VIEW_COMPLETE, 
 											onWaveViewCompleted);
+			
+			//clear the reference
 			waveCompletedView = null;
 			
+			//if there are no ships
 			if(!ship)
 			{
+				//initialize a new ship
 				initShip();
 			}
 			
+			//increment the wave / level counter
 			wave++;
+			
+			//update scorebar
 			scoreBar.wave = wave;
 			
-			//removeAllMissiles();
+			//add the enemies
 			addEnemies();
 			
-			//timer.start();
+			//listen for tick events
 			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
 		}
 		
+		//called when the time interval after a ship is destroyed is up
 		private function onDeathPauseTimer(e:TimerEvent):void
 		{						
+			//stop event propagation for performance reasons
 			e.stopImmediatePropagation();
+			
+			//reset all of the enemies
 			resetEnemies();
+			
+			//initialize a new ship
 			initShip();			
 			
+			//stop the timer
 			deathPauseTimer.stop();
+			
+			//remove listener
 			deathPauseTimer.removeEventListener(TimerEvent.TIMER, 
 															onDeathPauseTimer);
+			
+			//add a new listener
 			deathPauseTimer.addEventListener(TimerEvent.TIMER, 
 													onSpawnShipTimer, false, 
 													0, true);
 			
+			//set the intervale to 2 seconds
 			deathPauseTimer.delay = 2000;
+			
+			//start the timer again. This gives the player 2 seconds to react to the
+			//ship respawning before the enemies reappear
 			deathPauseTimer.start();
 		}
 		
+		//called after a ship has been destroyed and respawned
 		private function onSpawnShipTimer(e:TimerEvent):void
 		{
+			//stop event propagation for performance reasons
 			e.stopImmediatePropagation();
-			//should we reuse this?
+			
+			//todo: should we reuse this?		
+			
+			//stop timer
 			deathPauseTimer.stop();
+			
+			//remove listener
 			deathPauseTimer.removeEventListener(TimerEvent.TIMER, 
 															onSpawnShipTimer);
+			
+			//clear reference to timer
 			deathPauseTimer = null;
 			
+			//restart all of the enemies
 			restartEnemies();
 
+			//reset tick count
 			tickCount = 0;
+			
+			//start listening for tick events
 			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
 		}		
 		
+		//called when an enemy is destroyed
 		private function onEnemyDestroyed(e:GameObjectEvent):void
 		{
+			//stop event propagation for performance reasons
 			e.stopImmediatePropagation();
+			
+			//get a reference to the enemy being destroyed
 			var enemy:Enemy = Enemy(e.target);
+			
+			//get the enemy bounds
 			var b:Rectangle = enemy.getBounds(this);
 			
+			//create an explosion in the place of the enemy
 			createExplosion(b.x + (b.width * .5), b.y + (b.height * .5));
 			
+			//update the score value
 			score += enemy.pointValue;
+			
+			//update the score display
 			scoreBar.score = score;			
 			
+			//remove the enemy
 			removeEnemy(enemy);
 		}
 
+		//called when a ship fires a missles
 		private function onShipFire(e:FireEvent):void
 		{
+			//stop event propagation for performance reasons
 			e.stopImmediatePropagation();
+			
+			//get a reference to the missile
 			var m:Missile = e.projectile;
 			
+			//position it
 			m.x = ship.x;
 			m.y = ship.y;
 			
+			//listen for then the missile needs to be removed (i.e. goes off stage)
 			m.addEventListener(GameObjectEvent.REMOVE_MISSILE, onRemoveMissile, false, 0, true);
 			
+			//add the missile to the game area
 			addGameObject(m, true);
 			
+			//add the missile to the vector of all missiles
 			missiles.push(m);
 		}
 		
+		//called when a missile should be removed (probably because it went off
+		//of the game area).
 		private function onRemoveMissile(e:GameObjectEvent):void
 		{
+			//stop event propagation for performance reasons	
 			e.stopImmediatePropagation();
+			
+			//remove the missile
 			removeMissile(Missile(e.target));
 		}
 		
-		private function removeMissile(missile:Missile):void
-		{
-			gameObjectPool.returnGameObject(missile);
-			
-			missile.removeEventListener(GameObjectEvent.REMOVE_MISSILE, onRemoveMissile);
-			
-			var index:int = missiles.indexOf(missile);
-			missiles.splice(index, 1);
-		}
-		
+		//called when an item needs to be removed from the game area
 		private function onRemoveItem(e:GameObjectEvent):void
 		{
+			//stop event propagation for performance reasons
 			e.stopImmediatePropagation();
+			
+			//remove the item from the game area
 			removeEnemy(GameObject(e.target));
 		}	
 	}
