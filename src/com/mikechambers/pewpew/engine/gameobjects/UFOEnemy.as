@@ -42,6 +42,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 	
 		This enemy appears at intervals in later stages
 		and moves across the screen
+	
+		Note that graphics for this class are defined within the FLA
 	*/
 	public class UFOEnemy extends Enemy
 	{

@@ -43,6 +43,8 @@ package com.mikechambers.pewpew.engine.gameobjects
 
 	/*
 		Class that represents the player's ship
+	
+		Note that graphics for this class are defined within the FLA
 	*/
 	public class Ship extends PewPewGameObject
 	{

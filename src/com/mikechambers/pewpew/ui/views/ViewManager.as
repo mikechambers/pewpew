@@ -32,32 +32,62 @@ package com.mikechambers.pewpew.ui.views
 	//commented out a bunch of stuff so Tween library is not compiled
 	//since it is not being used right now
 	
+
+	/*
+		Class that manages the view stack.
+	
+		Has support for animation transitions between views, although
+		it is not being used right now.
+	
+		The animation / slide transition were removed for performance
+		reasons. Too slow on iPHone before hardware acceleration was
+		added. They should work fine now on the android devices, especially
+		once hardware acceleration is added.
+	
+		Note, that the tween code is commented out, because on the iphone
+		the code would be compiled into the binary, making it larger. It is commented
+		out so it would not add additional size.
+	
+		//todo: remove comments from code, and readd support to animating views in and out
+	*/
 	public class ViewManager
 	{
+		//transition type: slide from right to main screen
 		//public static const SLIDE_FROM_RIGHT:String = "slideFromRight";
+		
+		//transition type: no transition, replace previous view
 		public static const NO_TRANSITION:String = "noTransition";
 		
 		private var _overlayView:DisplayObject;
 		private var _currentView:DisplayObject;
 		private var _container:DisplayObjectContainer;
 		
+		//constructor, takes the DisplayObjectContainer instances where the
+		//views will be parented
 		public function ViewManager(container:DisplayObjectContainer)
 		{
 			_container = container;
 		}
 		
+		//display the specified view, with the specified transition type
 		public function displayView(view:DisplayObject, transitionType:String):void
 		{
+			//place the new view just off stage to the right
+			//todo: this is unecessary right now since we dont do the slide
+			//transition
 			var containerWidth:Number = _container.stage.stageWidth;
 			//view.x = view.getBounds(_container).width;
 			view.x = containerWidth;
 			view.y = 0;
 			
+			//check if we are currently displaying a view
 			if(_currentView)
 			{
+				//tween view out. not supported right now
 				//_container.removeChild(_currentView);
 				//TweenLite.to(_currentView, 1, {x:_currentView.getBounds(_container).width * -1, y:0});
 				
+				//check what transition type was specified
 				switch(transitionType)
 				{
 					/*
@@ -76,13 +106,16 @@ package com.mikechambers.pewpew.ui.views
 					}
 					default:
 					{
-						trace("ViewManager We should never get here.");
+						//specified an unknown transition type
+						trace("ViewManager : Unknown transition specified : " + transitionType);
 					}
 				}
 			}
 			
+			//check and see if the view is already parented in the containter
 			if(!_container.contains(view))
 			{
+				//if it is not, add it
 				_container.addChild(view);
 				
 				switch(transitionType)
@@ -96,13 +129,14 @@ package com.mikechambers.pewpew.ui.views
 					*/
 					case NO_TRANSITION:
 					{
+						//move it into position
 						view.x = 0;
 						tweenInComplete(view);
 						break;
 					}
 					default:
 					{
-						trace("ViewManager We should never get here.");
+						trace("ViewManager : Unknown transition specified : " + transitionType);
 					}
 				}				
 			}
@@ -110,32 +144,42 @@ package com.mikechambers.pewpew.ui.views
 			//_currentView = view;
 		}
 		
+		//called when a new move is moved into position
 		private function tweenInComplete(displayObject:DisplayObject):void
 		{
 			_currentView = displayObject;
 		}
 		
+		//called when an old view is moved off stage
 		private function tweenOutComplete(displayObject:DisplayObject):void
 		{
+			//remove it from containter
 			_container.removeChild(displayObject);
 		}
 		
 		//we might not need overlays. Might be able to just put the high score view
 		//in the gameArea
+		//this adds support for overlaying another view on top of a current one.
+		//todo: this was a quick hack, and should probably be rethought
 		public function displayOverlayView(view:DisplayObject):void
 		{
+			//if the containter does not already contain the overlay view
 			if(!_container.contains(view))
 			{
+				//add it
 				_container.addChild(view);
 			}
 			
 			_overlayView = view;
 		}
 		
+		//removes the overlay item
 		public function removeOverlayView():void
 		{
+			//if the container contains the overlayView
 			if(_container.contains(_overlayView))
 			{
+				//remove it
 				_container.removeChild(_overlayView);
 			}
 			

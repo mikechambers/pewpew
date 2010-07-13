@@ -26,14 +26,28 @@ package com.mikechambers.pewpew.ui.events
 {
 	import flash.events.Event;
 
+	/*
+		Class that represents event broadcast when screen views need
+		to be changed / updated
+	*/
 	public class ScreenControlEvent extends Event
 	{
+		//game is over
 		public static const GAME_OVER:String = "onGameOver";
+		
+		//request to play game
 		public static const PLAY:String = "onPlay";
+		
+		//request to view high scores (not implimented)
 		public static const HIGH_SCORES:String = "onHighScores";
+		
+		//request to view stats (not implimented)
 		public static const STATS:String = "onStats";
+		
+		//request to view profile (not implimented)
 		public static const PROFILE_SELECTED:String = "onProfileSelected";
 	
+		//profile name being requested (not implimented)
 		public var profileName:String;
 	
 		public function ScreenControlEvent( type:String, bubbles:Boolean=true, 
