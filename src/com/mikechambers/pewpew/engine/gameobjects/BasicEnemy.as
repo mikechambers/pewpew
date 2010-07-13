@@ -33,52 +33,77 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import com.mikechambers.sgf.events.TickEvent;
 	import com.mikechambers.sgf.time.TickManager;
 
+	/*
+		Class that represents the default / basic enemy in the game.
+	*/
 	public class BasicEnemy extends Enemy
 	{
 
+		//point worth baseline
 		private static const POINT_BASE:uint = 100;
+		
+		//base speed
 		private static const SPEED:Number = 2.3 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
+		
+		//vector / direction
 		private var direction:Number; // in radians
 		
+		//velecity x
 		private var vx:Number;
+		
+		//velecity y
 		private var vy:Number;
 		
+		//modifer for speed (determined by level)
 		private var speedModifier:Number;
 
+		//bounds. We cache them here for performance
 		private var left:Number;
 		private var right:Number;
 		private var top:Number;
 		private var bottom:Number;
 
+		//constructor
 		public function BasicEnemy()
 		{
 			super();
 		}
 	
+		//initialize method
+		//allows the same enemy to be pooled / reused / paused and removed
+		//bounds is the bounds of the game area
+		//target is the ship (not used here)
+		//modifer is the current wave
 		public override function initialize(bounds:Rectangle, 
 										target:DisplayObject = null, 
 										modifier:Number = 1):void
 		{
+			//pass to super class
 			super.initialize(bounds, target, modifier);
 			
 			
-			
+			//randomly generate speed modifier
 			speedModifier = (Math.random() * modifier);
 			
+			//make sure it is greater than one
 			if(speedModifier < 1)
 			{
 				speedModifier = 1;
 			}
 			
+			//randomely determin a direction
 			direction = (Math.random() * 360) * Math.PI / 180;
 			
+			//cache bounds properties (for performance)
 			left = bounds.left;
 			right = bounds.right;
 			top = bounds.top;
 			bottom = bounds.bottom;			
 			
+			//greate a random point within the bounds
 			var p:Point = generateRandomBoundsPoint();
 			
+			//set position to that point
 			x = p.x;
 			y = p.y;
 			
@@ -102,29 +127,39 @@ package com.mikechambers.pewpew.engine.gameobjects
 				y = bounds.height;
 			}
 			
+			//figure out vectory on x and y
 			vx = SPEED * Math.cos(direction) * speedModifier;
 			vy = SPEED * Math.sin(direction) * speedModifier;				
 		}
 	
+		//starts the enemy
 		public override function start():void
 		{
 			super.start();
 		}
 		
+		//pauses the enemy
 		public override function pause():void
 		{
 			super.pause();
 		}
 	
+		//returns the point value when the enemy is destroyed
 		public override function get pointValue():int
 		{
+			//basically POINT_BASE * speedModifier (the faster it is, the more
+			//it is worth)
 			return int(Math.round(POINT_BASE * speedModifier));
 		}
 		
+		//called on game ticks / intervals
 		protected override function onTick(e:TickEvent):void
 		{						
+			//stop propagation for performance reasons
 			e.stopPropagation();
 			
+			//check to see if we have hit the boundry and the bounds
+			//if so, change direction (bounce of the bounds)
 			if(x + width > right)
 			{
 				x = right - width;
@@ -146,6 +181,7 @@ package com.mikechambers.pewpew.engine.gameobjects
 				vy *= -1;
 			}
 			
+			//update position
 			x += vx;
 			y += vy;
 		}	
