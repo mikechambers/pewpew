@@ -26,17 +26,22 @@ package com.mikechambers.pewpew.ui
 {
 	import flash.display.Sprite;
 
+	/*
+		Base class for visual controlls used in the game
+	*/
 	public class GameUIComponent extends Sprite
 	{
 	
+		//constructor
 		public function GameUIComponent()
 		{
 			super();
 			
+			//disable mouse events
 			mouseEnabled = false;
 			mouseChildren = false;
 			
-			//cacheAsSurface = true;
+			//cache displays so they can be accelerated
 			cacheAsBitmap = true;
 		}
 	

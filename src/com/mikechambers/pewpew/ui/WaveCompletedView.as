@@ -31,44 +31,72 @@ package com.mikechambers.pewpew.ui
 	import flash.events.TimerEvent;
 	import flash.text.TextField;
 
+	/*
+		View displayed when a level / wave is completed.
+	
+		Graphics defined in FLA
+	
+		todo: need to handle the timer lifecycle better
+	*/
 	public class WaveCompletedView extends GameUIComponent
 	{
+		//wave completed string template
 		private static const COMPLETED_TEMPLATE:String = "Wave {0} Completed";
+		
+		//interval that the view is visible
 		private static const TIMER_INTERVAL:Number = 3000;
 		
+		//timer that manager how long the view is displayed
 		private var timer:Timer;
 		
 		//instantiated within FLA
 		public var waveField:TextField;
 		
+		//constructor
 		public function WaveCompletedView()
 		{
 		}
 
+		//displays the wave completed message
 		public function display(wave:uint):void
 		{	
+			//insert the wave into the completed string
 			waveField.text = COMPLETED_TEMPLATE.replace("{0}", String(wave));
 			
+			//if we already have timer instance
+			//todo: when / why would be have an existing timer instance?
 			if(timer)
 			{
-				timer.reset(); //or reset?
+				//reset it
+				timer.reset();
 			}
 			else
 			{
+				//otherwise, create a new one
 				timer = new Timer(TIMER_INTERVAL);
 			}
 				
+			//listen for the onTimer event
 			timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, 
-																	true);			
+																	true);
+			
+			//start the timer
 			timer.start();
 		}
 		
+		//called when the timer interval has passed
 		private function onTimer(e:TimerEvent):void
 		{
+			//stop timer
 			timer.stop();
+			
+			//remove listener
 			timer.removeEventListener(TimerEvent.TIMER, onTimer);
+			
+			//remove reference
 			timer = null;
 			
+			//dispatch event that the wave view has completed
 			var ge:GameEvent = new GameEvent(GameEvent.WAVE_VIEW_COMPLETE);
 			
 			dispatchEvent(ge);

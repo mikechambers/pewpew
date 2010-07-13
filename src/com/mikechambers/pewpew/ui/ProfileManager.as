@@ -31,6 +31,13 @@ package com.mikechambers.pewpew.ui
 	
 	import com.mikechambers.pewpew.ui.events.ScreenControlEvent;
 	
+	/*
+		Begining of a class to manager profiles.
+	
+		Not really implimented and not currently used.
+	
+		graphics defined in FLA
+	*/
 	public class ProfileManager extends Sprite
 	{
 		public var labelField:TextField;

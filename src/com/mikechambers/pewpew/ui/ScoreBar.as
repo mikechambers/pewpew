@@ -30,6 +30,13 @@ package com.mikechambers.pewpew.ui
 	import flash.events.Event;
 	import flash.text.TextField;
 	
+	/*
+		Scorebar for game.
+	
+		graphics defined in FLA
+	
+		TODO: need to make layout dynamic
+	*/
 	public class ScoreBar extends GameUIComponent
 	{	
 		//instantiated within FLA
@@ -37,23 +44,27 @@ package com.mikechambers.pewpew.ui
 		public var scoreField:TextField;
 		public var waveField:TextField;
 		
+		//constructor
 		public function ScoreBar()
 		{
-			cacheAsBitmap = true;
+			super();
 		}	
 		
 		/******* getters and setters ***********/
 		
+		//number of lives
 		public function set lives(value:int):void
 		{
 			livesField.text = String(value);
 		}
 		
+		//current score
 		public function set score(value:int):void
 		{
 			scoreField.text = NumberUtil.formatNumber(value);
 		}
 		
+		//current wave / level
 		public function set wave(value:int):void
 		{
 			waveField.text = String(value);

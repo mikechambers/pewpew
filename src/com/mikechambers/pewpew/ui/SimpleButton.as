@@ -27,20 +27,29 @@ package com.mikechambers.pewpew.ui
 	import flash.display.Sprite;
 	import flash.text.TextField;
 	
+	/*
+		A simple button component
+	
+		graphics defined in FLA
+	*/
 	public class SimpleButton extends Sprite
 	{
+		//text field for button
 		public var labelField:TextField;
 		
+		//constructor
 		public function SimpleButton()
 		{
 			mouseChildren = false;
 		}
 		
+		//set label
 		public function set label(v:String):void
 		{
 			labelField.text = v;
 		}
 		
+		//return label
 		public function get label():String
 		{
 			return labelField.text;
