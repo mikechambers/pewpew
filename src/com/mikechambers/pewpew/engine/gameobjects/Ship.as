@@ -41,114 +41,172 @@ package com.mikechambers.pewpew.engine.gameobjects
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 
+	/*
+		Class that represents the player's ship
+	*/
 	public class Ship extends PewPewGameObject
 	{
+		//speed of ship
 		private static const SPEED:Number = 3.5 * (TickManager.BASE_FPS_RATE / TickManager.FPS_RATE);
 		
+		//how often the ship fires
 		private const FIRE_INTERVAL:int = int(TickManager.FPS_RATE / 4);
 		
+		//counter that tracks number of game interval ticks which have ticked
 		private var fireTickCounter:int = 0;
 		
+		//the game controller that controlls the ship
 		private var _gameController:GameController;
 		
+		//a reference to the game object pool
 		private var gameObjectPool:GameObjectPool;
+		
+		//whether the mouse button is down / or the user is touching the screen
+		private var mouseDown:Boolean = false;
 
+		//constructor
 		public function Ship()
-		{						
+		{			
+			//get a reference to the game object pool instance.
+			//we will use this to get missile instances
 			gameObjectPool = GameObjectPool.getInstance();
 		}
-				
+		
+		//setter to set the controller for the ship
 		public function set gameController(value:GameController):void
 		{
 			this._gameController = value;
 		}
 
+		//called when the ship is removed from the game area
 		protected override function onStageRemoved(e:Event):void
 		{
 			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);															
 		}
 
+		//starts the ship
 		public override function start():void
 		{
 			super.start();
 
+			//listen for mouse up and mouse down events. On touch devices
+			//single touch events will also generate equivilant mouse events
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false, 
 																	0, true);
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0,
 																		true);
 		}
 		
+		//pauses the ship
 		public override function pause():void
 		{
 			super.pause();
-
-			//stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-			//stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		}
 		
+		//called on game ticks / intervals
 		protected override function onTick(e:TickEvent):void
 		{			
-			
+			//stop event propagation for performance reasons
 			e.stopPropagation();
 
+			//if the mouse is not down, or the user is not touching the screen
+			//then do nothing
 			if(!mouseDown)
 			{
 				return;
 			}
 			
+			//update the fireTickCounter
 			fireTickCounter++;
+			
+			//if it is time to fire (right now 4 times a second) then fire
 			if(!(fireTickCounter % FIRE_INTERVAL))
 			{
 				fire();
 			}
 	
+			//get the angle of the controller
 			var radians:Number = _gameController.angle;
+			
+			//rotate the ship to match the controllers angle
 			this.rotation = MathUtil.radiansToDegrees(radians);
 			
+			//use the angle to determine the new x and y vectors
 			var vx:Number = Math.cos(radians) * SPEED;
 			var vy:Number = Math.sin(radians) * SPEED;
 	
+			//do a temp caluclation for x and y position
 			var tempX:Number = this.x + vx;
 			var tempY:Number = this.y + vy;	
 	
+			//make sure we are still within the bounds
 			if(tempX < bounds.left ||
 				tempX > bounds.right ||
 				tempY < bounds.top ||
 				tempY > bounds.bottom)
 			{
+				//if not, return without updating position
 				return;
 			}					
 						
+			//update position
 			this.x += vx;
 			this.y += vy;	
 		}		
 		
-		private var mouseDown:Boolean = false;
+		//called when the mouse button is pressed, or the user
+		//touches the screen
 		private function onMouseDown(e:MouseEvent):void
 		{	
+			//stop event propagation for performance reasons
 			e.stopPropagation();
+			
+			//set mouseDown to true
 			mouseDown = true;
 		}
 		
+		//called when the mouse button is release, or the user raises their finger
+		//from the screen
 		private function onMouseUp(e:MouseEvent):void
 		{	
+			//stop event propagation for performance reasons
 			e.stopPropagation();
+			
+			//reset fire tick counter
 			fireTickCounter = 0;	
+			
+			//set mouse down to false
 			mouseDown = false;	
 		}		
 		
+		//fires a missile
 		private function fire():void
-		{						
+		{				
+			//get a missile instance from the object pool
 			var m:Missile = Missile(gameObjectPool.getGameObject(Missile));
+			
+			//initialize it with the game bounds
 			m.initialize(bounds);
+			
+			//specificy the correct angle for travelling
 			m.angle = this.rotation;
 			
+			//create a new fire event
 			var e:FireEvent = new FireEvent(FireEvent.FIRE);
+			
+			//attach the missile
 			e.projectile = m;
+			
+			//broadcast
 			dispatchEvent(e);
 		}
 		
+		
+		//the code below is for when the ship follows a target
+		//and not the controller. This is mostly for adding support
+		//for playing the game in the browser, and having the ship
+		//follow the mouse cursor
 		/*
 		var p1:Point = new Point();
 		var p2:Point = new Point();
