@@ -27,8 +27,10 @@ package com.mikechambers.pewpew.engine.events
 	import com.mikechambers.pewpew.engine.gameobjects.Missile;
 	import flash.events.Event;
 	
+	//event that represents projectiles being fired from a ship
 	public class FireEvent extends Event
 	{
+		//missile is fired
 		public static const FIRE:String = "onFire";
 		
 		public var projectile:Missile;

@@ -27,10 +27,14 @@ package com.mikechambers.pewpew.engine.events
 
 	import flash.events.Event;
 
+	///event that represents various game events being broadcast
 	public class GameEvent extends Event
 	{
 	
+		//the end of wave view has completed being displayed
 		public static const WAVE_VIEW_COMPLETE:String = "onWaveViewCompleted";
+		
+		//an explosion has completed
 		public static const EXPLOSION_COMPLETE:String = "onExplosionComplete";
 	
 		public function GameEvent( type:String, bubbles:Boolean=true, cancelable:Boolean=false )

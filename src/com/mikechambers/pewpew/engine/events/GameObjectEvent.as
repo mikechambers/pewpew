@@ -26,10 +26,19 @@ package com.mikechambers.pewpew.engine.events
 {
 	import flash.events.Event;
 
+	//represents events broadcast by game objects
 	public class GameObjectEvent extends Event
 	{
+		//broadcasting object should be removed from the game area.
+		//usually because it has gone out of the bounds of the game area.
 		public static const REMOVE:String = "onItemShouldRemove";
+		
+		//broadcasting missile should be removed from the game area
+		//usually because it has gone out of the bounds of the game area.
 		public static const REMOVE_MISSILE:String = "onItemShouldRemoveMissile";
+		
+		//broadcasting item has been destroyed
+		//usually because it was hit with a missle
 		public static const DESTROYED:String = "onItemDestroyed";
 		
 		public function GameObjectEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
