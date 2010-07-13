@@ -58,6 +58,11 @@ package com.mikechambers.pewpew.engine.gameobjects
 			super();
 		}	
 		
+		//initialize method
+		//allows the same enemy to be pooled / reused / paused and removed
+		//bounds is the bounds of the game area
+		//target is the ship (not used here)
+		//modifer is the current wave		
 		public override function initialize(bounds:Rectangle, 
 										target:DisplayObject = null, 
 										modifier:Number = 1):void
