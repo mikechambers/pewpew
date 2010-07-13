@@ -33,6 +33,11 @@ package com.mikechambers.pewpew.engine
 	
 	import com.mikechambers.pewpew.engine.gameobjects.Ship;
 
+	/*
+		Class used for mouse based game support (not currently implimented).
+		
+		target follows the mouse, and the ship follows and fires toward the target.
+	*/
 	public class Target extends Sprite
 	{
 		private var tickManager:TickManager;
