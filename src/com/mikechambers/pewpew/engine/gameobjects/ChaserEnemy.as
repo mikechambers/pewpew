@@ -24,16 +24,15 @@
 
 package com.mikechambers.pewpew.engine.gameobjects
 {	
-	import com.mikechambers.pewpew.utils.MathUtil;
-
-	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.geom.Rectangle;
-	import flash.display.DisplayObject;
-	import flash.geom.Point;
-	
 	import com.mikechambers.sgf.events.TickEvent;
 	import com.mikechambers.sgf.time.TickManager;
+	import com.mikechambers.sgf.utils.MathUtil;
+	
+	import flash.display.DisplayObject;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 
 	public class ChaserEnemy extends Enemy
 	{

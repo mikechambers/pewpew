@@ -24,14 +24,14 @@
 
 package com.mikechambers.pewpew.ui
 {
-	import com.mikechambers.pewpew.utils.NumberUtil;
+	import com.mikechambers.sgf.utils.NumberUtil;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.utils.Timer;
 	import flash.events.TimerEvent;
-	import flash.text.TextField;
 	import flash.system.System;
+	import flash.text.TextField;
+	import flash.utils.Timer;
 	
 	public class FPSView extends GameUIComponent
 	{

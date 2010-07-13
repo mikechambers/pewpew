@@ -26,11 +26,11 @@ package com.mikechambers.pewpew.engine.gameobjects
 {
 	import com.mikechambers.pewpew.engine.events.FireEvent;
 	import com.mikechambers.pewpew.ui.GameController;
-	import com.mikechambers.pewpew.utils.MathUtil;
 	import com.mikechambers.sgf.events.TickEvent;
 	import com.mikechambers.sgf.gameobjects.GameObject;
 	import com.mikechambers.sgf.pools.GameObjectPool;
 	import com.mikechambers.sgf.time.TickManager;
+	import com.mikechambers.sgf.utils.MathUtil;
 	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
