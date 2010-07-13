@@ -31,63 +31,88 @@ package com.mikechambers.pewpew.engine
 	import com.mikechambers.pewpew.engine.TickManager;
 	import com.mikechambers.pewpew.engine.events.TickEvent;
 	
-	import com.mikechambers.pewpew.engine.gameobjects.Ship;
-
 	/*
 		Class used for mouse based game support (not currently implimented).
 		
 		target follows the mouse, and the ship follows and fires toward the target.
+	
+		This was originally used in the web based version of the game, but is not needed
+		in the current touch based version. Im keeping it here in case I ever get around
+		to reimplinting mouse / web based version (depending on where it is running).
+	
+		I initially used this for the touch version as well. The ship would follow and fire
+		at where the finger was being pressed on the screen. However, this would mean that the
+		users finger and / or hand would block part of the screen at times, make it akward
+		to use. So we switched to the thumb paddle that we have now.
 	*/
 	public class Target extends Sprite
 	{
+		//tickManager to manage time
 		private var tickManager:TickManager;
-		public var ship:Ship;
 		
+		//constructor
 		public function Target()
 		{
 			super();
 			
-			this.ship = ship;
-			
+			//disable mouse events for performance reasons
 			mouseEnabled = false;
 			mouseChildren = false;
+			
+			//draw graphic for target
 			draw();
+			
+			//cache so it can be GPU accelerated
 			cacheAsBitmap = true;
 			
+			//list for when we are added to the stage
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded, false, 0, 
 																		true);
-																		
+													
+			//get and store and instance to the tickManager
 			tickManager = TickManager.getInstance();
 		}
 		
+		//called when the instance is added to the stage
 		private function onStageAdded(e:Event):void
 		{
-			//addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
+			//remove listener for being added to the stage
+			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);			
 			
-			tickManager.addEventListener(TickEvent.TICK, onEnterFrame, false, 0, true);
+			//listen for tick events
+			tickManager.addEventListener(TickEvent.TICK, onTick, false, 0, true);
+			
+			//listen for when we are removed from the stage
 			addEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved, false, 0, true);
-			removeEventListener(Event.ADDED_TO_STAGE, onStageAdded);
 
+			//set initial position to current mouse position
 			x = stage.mouseX;
 			y = stage.mouseY;
 		}
 		
+		//called when instance is removed from stage
 		private function onStageRemoved(e:Event):void
 		{
-			//removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			removeEventListener(TickEvent.TICK, onEnterFrame);
+			//stop listening to tick events
+			removeEventListener(TickEvent.TICK, onTick);
+			
+			//remove listener
 			removeEventListener(Event.REMOVED_FROM_STAGE, onStageRemoved);
 			
+			//listen for when we are added to the stage
 			addEventListener(Event.ADDED_TO_STAGE, onStageAdded, false, 0, 
 																		true);
 		}
 		
-		private function onEnterFrame(e:Event):void
+		//called on tick event / game time intervals
+		private function onTick(e:Event):void
 		{			
+			//update position to match current mouse position
 			x = stage.mouseX;
 			y = stage.mouseY;
 		}		
 		
+		//draw our graphics
 		private function draw():void
 		{
 			graphics.clear();
