@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<application xmlns="http://ns.adobe.com/air/application/2.0">
+<application xmlns="http://ns.adobe.com/air/application/2.5">
     <supportedProfiles>desktop mobileDevice</supportedProfiles>
     <!--   
  <iPhone>
@@ -12,7 +12,7 @@
     <id>com.mikechambers.pewpew</id>
     <filename>PewPew</filename>
     <name>PewPew</name>
-    <version>v1</version>
+    <versionNumber>0.86.0</versionNumber>
     <!-- <description></description> -->
     <!-- <copyright></copyright> -->
     <initialWindow>

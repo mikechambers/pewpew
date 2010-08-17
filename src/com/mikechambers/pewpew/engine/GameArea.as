@@ -290,7 +290,7 @@ package com.mikechambers.pewpew.engine
 		//initializes players ship
 		private function initShip():void
 		{
-			trace("init ship");
+			Log.getLogger("LOG").info("init ship");
 			//get a ship instance from the object pool
 			ship = Ship(gameObjectPool.getGameObject(Ship));
 			
