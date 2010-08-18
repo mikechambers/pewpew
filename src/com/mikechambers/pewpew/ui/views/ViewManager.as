@@ -107,7 +107,7 @@ package com.mikechambers.pewpew.ui.views
 					default:
 					{
 						//specified an unknown transition type
-						Log.getLogger("LOG").info("ViewManager : Unknown transition specified : " + transitionType);
+						trace("ViewManager : Unknown transition specified : " + transitionType);
 					}
 				}
 			}
@@ -136,7 +136,7 @@ package com.mikechambers.pewpew.ui.views
 					}
 					default:
 					{
-						Log.getLogger("LOG").info("ViewManager : Unknown transition specified : " + transitionType);
+						trace("ViewManager : Unknown transition specified : " + transitionType);
 					}
 				}				
 			}
